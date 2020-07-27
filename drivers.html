@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- General -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logista -Map</title>
+  <!-- fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <!-- vendors -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+    integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+  <!-- css -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
+  <!-- js -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
+  <script src="assets/js/functions.js"></script>
+  <script defer src="assets/js/main.js"></script>
+  <script defer src="assets/js/driver.js"></script>
+</head>
+
+<body>
+  <div class="addDriver_popup-container">
+    <div class="addDriver_popup">
+      <div class="addDriver_popup-content">
+        <div class="addDriver_popup-heading">
+          <h1 class="addDriver_popup-header">Add Driver</h1>
+        </div>
+        <form class="addDriver_popup-form" action="">
+          <div class="addDriver_popup-form-content">
+            <div class="general_info">
+              <div class="drive_input-container">
+                <label for="">Frist Name <span class="required">*</span></label>
+                <input type="text" class="drive_input" name="driverFirstName" required />
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">last Name</label>
+                <input type="text" class="drive_input" name="driverLastName" />
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">Email</label>
+                <input type="email" class="drive_input" name="driverEmail" required />
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">Phone <span class="required">*</span></label>
+                <input type="text" class="drive_input" name="driverPhoneNumber" required />
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">username <span class="required">*</span></label>
+                <input type="text" class="drive_input" name="driverUsername" required />
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">Password (Minimum 8) <span class="required">*</span></label>
+                <input type="password" class="drive_input" name="driverPassword" required />
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">assign role</label>
+                <select type="text" class="drive_input" name="driverRole">
+                  <option value="0">admin</option>
+                  <option value="1">user</option>
+                  <option value="2">idk</option>
+                </select>
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">tags </label>
+                <input type="text" class="drive_input" name="driverTags" />
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">assign to team <span class="required">*</span></label>
+                <select type="text" class="drive_input" name="driverTeam">
+                  <option value="0">team 1</option>
+                  <option value="1">team 2</option>
+                  <option value="2">team 3</option>
+                </select>
+              </div>
+
+              <div class="drive_input-container">
+                <label for="">home address</label>
+                <input type="text" placeholder="Enter home address" class="drive_input" name="driverAddress" />
+              </div>
+            </div>
+            <div class="driver_image">
+              <div class="profile_imageContent">
+                <img src="assets/images/profile_image.jpg" alt="profile_image" />
+              </div>
+              <label class="driver_proile_picture-label" for="driver_proile_picture"><i class="fas fa-folder-open"></i>
+                Upload</label>
+              <input type="file" id="driver_proile_picture" name="driver_proile_picture" required />
+            </div>
+          </div>
+          <div class="car_type_select drive_input-container drive_input-container--full">
+            <div class="radio_custom">
+              <input class="radio_custom-input" value="truck" type="radio" name="transportation_type"
+                id="transportation_truck" required />
+              <label class="radio_custom-label" for="transportation_truck">
+                <i class="fas fa-truck"></i>
+              </label>
+            </div>
+            <div class="radio_custom">
+              <input class="radio_custom-input" value="car" type="radio" name="transportation_type"
+                id="transportation_car" />
+              <label class="radio_custom-label" for="transportation_car">
+                <i class="fas fa-car"></i>
+              </label>
+            </div>
+            <div class="radio_custom">
+              <input class="radio_custom-input" value="motorcycle" type="radio" name="transportation_type"
+                id="transportation_moto" />
+              <label class="radio_custom-label" for="transportation_moto">
+                <i class="fas fa-motorcycle"></i>
+              </label>
+            </div>
+            <div class="radio_custom">
+              <input class="radio_custom-input" value="bike" type="radio" name="transportation_type"
+                id="transportation_bike" />
+              <label class="radio_custom-label" for="transportation_bike">
+                <i class="fas fa-bicycle"></i>
+              </label>
+            </div>
+            <div class="radio_custom">
+              <input class="radio_custom-input" value="onFoot" type="radio" name="transportation_type"
+                id="transportation_walk" />
+              <label class="radio_custom-label" for="transportation_walk">
+                <i class="fas fa-walking"></i>
+              </label>
+            </div>
+          </div>
+          <button>add driver</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNBlO3zbLUSmjmiCSKJRPvGaYHm6CoIFQ&libraries=places&callback=initMap"
+    async defer></script>
+  <!-- <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNBlO3zbLUSmjmiCSKJRPvGaYHm6CoIFQ&libraries=places&callback=initAddTaskMap"
+    async defer></script> -->
+</body>
+
+</html>

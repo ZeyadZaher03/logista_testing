@@ -197,10 +197,12 @@ p {
   padding: 1rem 0;
   height: 100%;
 }
+
 .map_tasks,
 .map_agents {
   height: 100%;
 }
+
 .map_info-col__containar {
   overflow-y: scroll;
 }
@@ -859,7 +861,7 @@ p {
     display: block;
   }
 
-  .navigation_second > .navigation_item {
+  .navigation_second>.navigation_item {
     display: block;
   }
 
@@ -1006,12 +1008,16 @@ p {
 /* registration page */
 
 .float_logo {
+  width: 15rem;
   padding: 1rem 3rem;
   border-radius: 10px;
   position: absolute;
   left: 2rem;
   top: 2rem;
-  background-color: #000;
+}
+
+.float_logo img {
+  width: 100%;
 }
 
 .registration_container {
@@ -1021,7 +1027,7 @@ p {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
   border: 1px solid #eee;
 }
@@ -1539,12 +1545,31 @@ p {
   display: none;
 }
 
-.radio_custom-input:checked + .radio_custom-label {
+.radio_custom-input:checked+.radio_custom-label {
   background-color: rgba(25, 99, 236, 0.3);
   box-shadow: 0 0 3px 1px rgba(25, 99, 236, 0.2);
   border: 1px solid rgba(25, 99, 236, 0.5);
 }
 
-.radio_custom-input:checked + .radio_custom-label svg {
+.radio_custom-input:checked+.radio_custom-label svg {
   color: #fff !important;
+}
+
+
+.errorMessage {
+  color: #ff2828;
+  text-align: center;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.errorMessage--active {
+  display: block;
+}
+
+.reg-input_err {
+  box-shadow: 0 0 5px rgb(255, 0, 0, 0.2);
+  border-radius: 5 px;
+  border: 1 px solid rgb(255 74 74 / 0.4);
+
 }

@@ -13,3 +13,19 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 // const db = firebase.firestore();
 const db = firebase.database();
+
+
+// changing icon by OS theme
+
+lightSchemeIcon = document.querySelector('#themeLightOsIconSite');
+darkSchemeIcon = document.querySelector('#themeDarkOsIconSite');
+
+function onUpdate() {
+    if (matcher.matches) {
+        lightSchemeIcon.remove();
+        document.head.append(darkSchemeIcon);
+    } else {
+        document.head.append(lightSchemeIcon);
+        darkSchemeIcon.remove();
+    }
+}

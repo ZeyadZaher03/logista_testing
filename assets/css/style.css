@@ -1206,7 +1206,7 @@ p {
 
 .createTaskItemContainerPopup {
   position: absolute;
-  left: 0;
+  left: -100%;
   display: none;
   z-index: 9999999;
   top: 0;
@@ -1225,6 +1225,14 @@ p {
   box-shadow: 7px 0 15px rgba(0, 0, 0, 0.15);
   background-color: #f1f1f1;
   height: 100%;
+}
+
+.createTaskItemContainer {
+  flex: 2;
+}
+
+.createTaskItemContainer_map {
+  flex: 3;
 }
 
 .createTaskItemContainer_form {
@@ -1570,6 +1578,6 @@ p {
 .reg-input_err {
   box-shadow: 0 0 5px rgb(255, 0, 0, 0.2);
   border-radius: 5 px;
-  border: 1 px solid rgb(255 74 74 / 0.4);
+  border: 1px solid rgba(255, 55, 55, 0.3) !important;
 
 }

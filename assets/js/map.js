@@ -1,14 +1,15 @@
 const uid = Cookies.get("uid");
 
 if (!uid) {
+  Cookies.remove("logedin");
   auth.signOut();
 }
 
 auth.onAuthStateChanged((user) => {
   if (!user) {
+    Cookies.remove("logedin");
+    Cookies.remove("uid");
     window.location.replace("signup.html");
-  } else {
-    // User not logged in or has just logged out.
   }
 });
 
@@ -18,6 +19,7 @@ logoutBtn.addEventListener("click", () => auth.signOut());
 const popUpMessage = document.querySelector(".popup_message");
 popUpMessage.addEventListener("click", () => {
   popUpMessage.style.display = "none";
+  Cookies.remove("logedin");
 });
 
 // init the map
@@ -32,8 +34,7 @@ function initMap() {
   });
 
   var addTaskMaps = new google.maps.Map(
-    document.querySelector(".createTaskItemContainer_map"),
-    {
+    document.querySelector(".createTaskItemContainer_map"), {
       zoom: 8,
       center: {
         lat: -33,
@@ -114,6 +115,8 @@ function initMap() {
 // =========== ADDING TASK ===========
 const addTaskBtn = document.querySelector(".createTaskBtnItem");
 const closeTaskBtn = document.querySelector(".createTaskItemContainer_close");
+const closeTaskkey = document.querySelector(".createTaskItemContainer_close");
+
 const createTaskItemContainerPopup = document.querySelector(
   ".createTaskItemContainerPopup"
 );
@@ -121,102 +124,140 @@ const createTaskItemContainer = document.querySelector(
   ".createTaskItemContainer"
 );
 
-closeTaskBtn.addEventListener("click", () => {
-  createTaskItemContainerPopup.classList.remove(
-    "createTaskItemContainerPopup--active"
-  );
-  createTaskItemContainer.classList.remove("createTaskItemContainer--active");
+addTaskBtn.addEventListener("click", (e) => {
+  e.preventDefault()
+  createTaskItemContainerPopup.style.display = "flex"
+  anime({
+    targets: ".createTaskItemContainerPopup",
+    left: ["-100%", "0%"],
+    duration: 500,
+    easing: 'easeInOutQuad'
+  })
+})
+
+closeTaskBtn.addEventListener("click", (e) => {
+  e.preventDefault()
+  anime({
+    targets: ".createTaskItemContainerPopup",
+    left: ["0%", "-100%"],
+    duration: 500,
+    easing: 'easeInOutQuad',
+    complete: () => {
+      createTaskItemContainerPopup.style.display = "none"
+    }
+  })
+})
+
+document.body.addEventListener('keydown', function (e) {
+  if (createTaskItemContainerPopup.style.display != "none") {
+    if (e.key == "Escape" || e.keyCode == 27) {
+      anime({
+        targets: ".createTaskItemContainerPopup",
+        left: ["0%", "-100%"],
+        duration: 500,
+        easing: 'easeInOutQuad',
+        complete: () => {
+          createTaskItemContainerPopup.style.display = "none"
+        }
+      })
+    }
+  }
 });
 
-addTaskBtn.addEventListener("click", (e) => {
-  createTaskItemContainerPopup.classList.add(
-    "createTaskItemContainerPopup--active"
-  );
-  createTaskItemContainer.classList.add("createTaskItemContainer--active");
-});
 
 const addingTaskForm = document.querySelector(".createTaskItemContainer_form");
 const createTaskItemContainer_btn = document.querySelector(
   ".createTaskItemContainer_btn"
 );
 
+addingTaskForm.querySelectorAll("input").forEach((requiredInput) => {
+  requiredInput.addEventListener("change", () => {
+    if (requiredInput.value != "") {
+      requiredInput.classList.remove("reg-input_err")
+    }
+  })
+})
 addingTaskForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const taskType =
-    addingTaskForm["taskType"].options[addingTaskForm["taskType"].selectedIndex]
-      .value;
 
-  const taskPickUpName = addingTaskForm["taskPickUpName"].value;
-  const taskPickUpNumber = addingTaskForm["taskPickUpNumber"].value;
-  const taskPickUpEmail = addingTaskForm["taskPickUpEmail"].value;
-  const taskPickUpOrderId = addingTaskForm["taskPickUpOrderId"].value;
-  const taskPickUpAddressLng = addingTaskForm["taskPickUpAddress"].getAttribute(
-    "lng"
-  );
-  const taskPickUpAddressLat = addingTaskForm["taskPickUpAddress"].getAttribute(
-    "lat"
-  );
-  const taskPickUpPickUpBefore = addingTaskForm["taskPickUpPickUpBefore"].value;
-  const taskPickUpDescription = addingTaskForm["taskPickUpDescription"].value;
+  const taskType = addingTaskForm["taskType"];
+  const taskTypeOption = taskType.options[taskType.selectedIndex];
+  const taskPickUpName = addingTaskForm["taskPickUpName"];
+  const taskPickUpNumber = addingTaskForm["taskPickUpNumber"];
+  const taskPickUpEmail = addingTaskForm["taskPickUpEmail"];
+  const taskPickUpOrderId = addingTaskForm["taskPickUpOrderId"];
+  const taskPickUpAddress = addingTaskForm["taskPickUpAddress"]
+  const taskPickUpAddressValue = taskPickUpAddress
+  const taskPickUpAddressLng = taskPickUpAddress.getAttribute("lng");
+  const taskPickUpAddressLat = taskPickUpAddress.getAttribute("lat");
+  const taskPickUpPickUpBefore = addingTaskForm["taskPickUpPickUpBefore"];
+  const taskPickUpDescription = addingTaskForm["taskPickUpDescription"];
 
-  const taskDeliveryName = addingTaskForm["taskDeliveryName"].value;
-  const taskDeliveryPhone = addingTaskForm["taskDeliveryNumber"].value;
-  const taskDeliveryEmail = addingTaskForm["taskDeliveryEmail"].value;
-  const taskDeliveryOrderId = addingTaskForm["taskDeliveryOrderId"].value;
-  const taskDeliveryAddressLng = addingTaskForm[
-    "taskDeliveryAddress"
-  ].getAttribute("lng");
-  const taskDeliveryAddressLat = addingTaskForm[
-    "taskDeliveryAddress"
-  ].getAttribute("lat");
-  const taskDeliveryPickUpBefore =
-    addingTaskForm["taskDeliveryPickUpBefore"].value;
-  const taskDeliveryDescription =
-    addingTaskForm["taskDeliveryDescription"].value;
+  const taskDeliveryName = addingTaskForm["taskDeliveryName"];
+  const taskDeliveryPhone = addingTaskForm["taskDeliveryNumber"];
+  const taskDeliveryEmail = addingTaskForm["taskDeliveryEmail"];
+  const taskDeliveryOrderId = addingTaskForm["taskDeliveryOrderId"];
+  const taskDeliveryAddress = addingTaskForm["taskDeliveryAddress"]
+  const taskDeliveryAddressLng = taskDeliveryAddress.getAttribute("lng");
+  const taskDeliveryAddressLat = taskDeliveryAddress.getAttribute("lat");
+  const taskDeliveryPickUpBefore = addingTaskForm["taskDeliveryPickUpBefore"];
+  const taskDeliveryDescription = addingTaskForm["taskDeliveryDescription"];
 
-  const taskItem = {
-    taskType: taskType,
-    taskDriver: "zeyad",
+  const addTaskValidate = [taskTypeOption, taskPickUpName, taskPickUpNumber, taskPickUpEmail, taskPickUpOrderId, taskPickUpAddressValue, taskPickUpPickUpBefore, taskDeliveryName, taskDeliveryPhone, taskDeliveryEmail, taskDeliveryOrderId, taskDeliveryAddress, taskDeliveryPickUpBefore]
 
+  let emptyInputs = 0;
+  addTaskValidate.forEach((input) => {
+    if (input.value.trim() == "") {
+      input.classList.add("reg-input_err")
+      return emptyInputs += 1
+    }
+  })
+  if (emptyInputs != 0) {
+    return
+  }
+
+  const task = {
+    driverId: 0,
+    taskType: taskTypeOption,
     pickup: {
-      name: taskPickUpName,
-      phone: taskPickUpNumber,
-      email: taskPickUpEmail,
-      orderId: taskPickUpOrderId,
-      pickUpAddress: {
-        taskPickUpAddressLng,
-        taskPickUpAddressLat,
+      name: taskPickUpName.value,
+      email: taskPickUpEmail.value,
+      phone: taskPickUpNumber.value,
+      orderId: taskPickUpOrderId.value,
+      description: taskPickUpDescription.value,
+      address: {
+        name: taskPickUpAddress.value,
+        lat: taskPickUpAddressLat,
+        lng: taskPickUpAddressLng,
       },
-      pickUpBefore: taskPickUpPickUpBefore,
-      description: taskPickUpDescription,
     },
-
-    delivery: {
-      name: taskDeliveryName,
-      phone: taskDeliveryPhone,
-      email: taskDeliveryEmail,
-      orderId: taskDeliveryOrderId,
-      deliverAddress: {
-        taskDeliveryAddressLng,
-        taskDeliveryAddressLat,
+    deliver: {
+      name: taskDeliveryName.value,
+      email: taskDeliveryEmail.value,
+      phone: taskDeliveryPhone.value,
+      orderId: taskDeliveryOrderId.value,
+      description: taskDeliveryDescription.value,
+      address: {
+        name: taskDeliveryAddress.value,
+        lat: taskDeliveryAddressLat,
+        lng: taskDeliveryAddressLng,
       },
-      deliverBefore: taskDeliveryPickUpBefore,
-      description: taskDeliveryDescription,
-    },
-    status: 0,
-  };
+    }
+  }
 
   db.ref(`users/${uid}/tasks`)
-    .push(taskItem)
+    .push(task)
     .then(() => {
       addingTaskForm.reset();
-      createTaskItemContainerPopup.classList.remove(
-        "createTaskItemContainerPopup--active"
-      );
-      createTaskItemContainer.classList.remove(
-        "createTaskItemContainer--active"
-      );
-
+      anime({
+        targets: ".createTaskItemContainerPopup",
+        left: ["0%", "-100%"],
+        duration: 500,
+        easing: 'easeInOutQuad',
+        complete: () => {
+          createTaskItemContainerPopup.style.display = "none"
+        }
+      })
       popUpMessage.innerHTML = "task added succesfully";
       popUpMessage.classList.add("popup_message--succ");
       popUpMessage.style.display = "block";
@@ -363,11 +404,11 @@ toggleHideAndShow(
   "hamburger_menu--active"
 );
 
-toggleHideAndShow(
-  ".createTaskBtn",
-  ".createTaskContainer",
-  "nav_popup--active"
-);
+// toggleHideAndShow(
+//   ".createTaskBtn",
+//   ".createTaskContainer",
+//   "nav_popup--active"
+// );
 
 toggleHideAndShow(".pickup_btn", ".pickup_contanier", "ocordion_body--active");
 
@@ -394,11 +435,11 @@ toggleHideAndShow(
   ".map_tasks",
   "map_col--collapsed",
   () =>
-    changeIcon(
-      ".map_info-col_icon--tasks",
-      "fa-chevron-left",
-      "fa-chevron-right"
-    )
+  changeIcon(
+    ".map_info-col_icon--tasks",
+    "fa-chevron-left",
+    "fa-chevron-right"
+  )
 );
 
 toggleHideAndShow(
@@ -406,11 +447,11 @@ toggleHideAndShow(
   ".map_agents",
   "map_col--collapsed",
   () =>
-    changeIcon(
-      ".map_info-col_icon--agents",
-      "fa-chevron-right",
-      "fa-chevron-left"
-    )
+  changeIcon(
+    ".map_info-col_icon--agents",
+    "fa-chevron-right",
+    "fa-chevron-left"
+  )
 );
 
 tabSystem(

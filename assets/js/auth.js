@@ -1,6 +1,6 @@
 // redirect user if he is logged in
 auth.onAuthStateChanged((user) => {
-  if (user || Cookies.get("logedin")) {
+  if (user || Cookies.get("logedin") == true) {
     return window.location.replace("index.html");
   }
 });
@@ -21,16 +21,21 @@ loginForm.addEventListener("submit", (e) => {
     .signInWithEmailAndPassword(loginEmail.value.trim(), loginPassword.value.trim())
     .then((cred) => {
       const uid = cred.user.uid;
-      if (Cookies.get("uid")) {
-        if (loginRemberMe.checked) {
-          Cookies.set("logedin", true, {
-            expires: 7,
-          });
-        }
-        Cookies.set("uid", uid, {
-          expires: 30,
+
+      if (loginRemberMe.checked) {
+
+        Cookies.set("logedin", true, {
+          expires: 7,
+        });
+
+        Cookies.set("email", loginEmail.value.trim(), {
+          expires: 7,
         });
       }
+
+      Cookies.set("uid", uid, {
+        expires: 30,
+      });
     })
     .catch((err) => {
       console.log(err.code)
@@ -80,7 +85,8 @@ signupForm.addEventListener("submit", (e) => {
       db.ref(`users/${uid}`).set({
         email: cred.user.email,
         fristName: signupFristName.value,
-        lastName: signupLastName.value
+        lastName: signupLastName.value,
+        notifications: []
       });
     })
     .catch((err) => {

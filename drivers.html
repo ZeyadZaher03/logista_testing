@@ -5,40 +5,321 @@
   <!-- General -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Logista -Map</title>
-  <!-- fonts -->
+  <title>Logista &nbsp;|&nbsp; Drivers</title>
+  <meta name="title" content="Logista | Drivers" />
+  <meta name="description"
+    content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+
+  <link rel="shortcut icon" href="assets/images/logos/logista-logo.png" type="image/x-icon" id="themeLightOsIconSite" />
+
+  <link rel="shortcut icon" href="assets/images/logos/logista-logo-white.png" type="image/x-icon"
+    id="themeDarkOsIconSite" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://logista.app/signup.html" />
+  <meta property="og:title" content="Logista | Drivers" />
+  <meta property="og:description"
+    content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+  <meta property="og:image" content="assets/images/logos/logista-logo-white-background.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://logista.app/signup.html" />
+  <meta property="twitter:title" content="Logista | Register" />
+  <meta property="twitter:description"
+    content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+  <meta property="twitter:image" content="assets/images/logos/logista-logo-white-background.png" />
+
+  <!-- Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap"
     rel="stylesheet" />
-  <!-- vendors -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
     integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+
+  <!-- javascript vendors -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"
+    integrity="sha256-hBMojZuWKocCflyaG8T19KBq9OlTlK39CTxb8AUWKhY=" crossorigin="anonymous"></script>
+  <!-- css vendors-->
+
   <!-- css -->
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css" />
-  <!-- js -->
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
+
+  <!-- javascript -->
   <script src="assets/js/functions.js"></script>
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/driver.js"></script>
 </head>
 
+
 <body>
+  <div class="confirmation_contianer_popup">
+    <div class="confirmation_contianer_popup-message">Are you sure</div>
+    <div class="confirmation_contianer_popup-btn_container">
+      <button id="confirmation_contianer_cancel" class="confirmation_contianer_popup-btn">Cancel</button>
+      <button id="confirmation_contianer_dicard" class="confirmation_contianer_popup-btn">dicard</button>
+    </div>
+  </div>
+  <div class="popup_message">
+  </div>
+  <nav class="navigation">
+    <ul class="navigation_list navigation_first">
+      <li class="navigation_item navigation_hamburgerBtn">
+        <div class="navigation_hamburgerBtn--item"></div>
+      </li>
+
+      <li class="navigation_item navigation_logoContainer">
+        <a href="#" class="navigation_link">
+          <h1>LOGISTA</h1>
+        </a>
+      </li>
+
+      <li class="navigation_item">
+        <a href="#" class="navigation_link navigation_box">
+          <div class="navigation_box--item navigation_box--active">
+            <i class="far fa-map"></i> MAP
+          </div>
+          <div class="navigation_box--item">
+            <i class="fas fa-list-ul"></i> List
+          </div>
+        </a>
+      </li>
+
+      <li class="navigation_item">
+        <a href="#" class="navigation_link navigation_box">
+          <div class="navigation_box--item">Today 12:00AM - 11:59 PM</div>
+          <div class="navigation_box--item">
+            <i class="fas fa-caret-down"></i>
+          </div>
+        </a>
+      </li>
+      <li class="navigation_item">
+        <a href="#" class="navigation_link navigation_box">
+          <div class="navigation_box--item">All Teams</div>
+          <div class="navigation_box--item">
+            <i class="fas fa-caret-down"></i>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+    <ul class="navigation_list navigation_second">
+      <li class="navigation_item">
+        <a href="#" class="navigation_link navigation_box-rounded">
+          <div class="navigation_box--item-rounded createTaskBtnItem">
+            Create Task
+          </div>
+          <div class="navigation_box--item-rounded createTaskBtn">
+            <i class="fas fa-caret-down"></i>
+          </div>
+        </a>
+      </li>
+
+      <div class="nav_popup createTaskContainer">
+        <a class="nav_popup-text" href="#">Bulk Import</a>
+      </div>
+
+      <li class="navigation_item">
+        <a href="#" class="navigation_link menu_navigation_btn">
+          <i class="navigation_icon fas fa-th"></i>
+        </a>
+      </li>
+
+      <div class="nav_popup menu_navigation_container">
+        <div class="menu_navigation_container-grid">
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+          <div class="menu_navigation_container-box">
+            <img class="menu_navigation_container-img" src="https://img.icons8.com/plasticine/2x/google-logo.png"
+              alt="blo" />
+            <p class="menu_navigation_container-par">My Chats</p>
+          </div>
+        </div>
+      </div>
+
+      <li class="navigation_item">
+        <a href="#" class="navigation_icon navigation_link">
+          <i class="fas fa-redo-alt"></i>
+        </a>
+      </li>
+      <li class="navigation_item">
+        <a href="#" class="navigation_icon navigation_link notification_btn">
+          <i class="fas fa-bell"></i>
+          <div class="notification_number">
+            1
+          </div>
+        </a>
+      </li>
+
+      <div class="nav_popup notification_nav_container">
+        <div class="notification_container">
+          <h2 class="notification_container--header">Updates</h2>
+          <ul class="notification_container--list">
+            <a class="notification_container--item" href="#">
+              <div class="notification_container--navigation_icon-contianer">
+                <i class="fas fa-circle"></i>
+              </div>
+              <div class="notification_container--navigation_text">
+                <p>
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Sequi nostrum nisi
+                </p>
+                <span>today</span>
+              </div>
+            </a>
+          </ul>
+          <div class="notification_footer">
+            <a href="#">More Updates</a>
+          </div>
+        </div>
+      </div>
+    </ul>
+
+    <div class="hamburger_menu">
+      <div class="hamburger_menu-header">
+        <div class="hamburger_btn-back_container">
+          <div class="navigation_hamburgerBtn--item"></div>
+        </div>
+        <div class="hamburger_logo">
+          <img src="assets/images/logos/svg/inner_logo.svg" alt="Logista logo" />
+        </div>
+      </div>
+
+      <ul class="hamburger_list">
+        <li class="hamburger_list">
+          <a class="hamburger_link hamburger_link--active" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-cog"></i>
+            </span>
+            <p class="hamburger_item-txt">dashboard</p>
+          </a>
+        </li>
+        <li class="hamburger_list">
+          <a class="hamburger_link" href="drivers.html">
+            <span class=" hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-user"></i>
+            </span>
+            <p class="hamburger_item-txt">Drivers</p>
+          </a>
+        </li>
+        <li class="hamburger_list">
+          <a class="hamburger_link" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-user-friends"></i>
+            </span>
+            <p class="hamburger_item-txt">Customers</p>
+          </a>
+        </li>
+        <li class="hamburger_list">
+          <a class="hamburger_link" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon far fa-chart-bar"></i>
+            </span>
+            <p class="hamburger_item-txt">Analytics</p>
+          </a>
+        </li>
+        <li class="hamburger_list">
+          <a class="hamburger_link" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-cog"></i>
+            </span>
+            <p class="hamburger_item-txt">Settings</p>
+          </a>
+        </li>
+        <li class="hamburger_list">
+          <a class="hamburger_link" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-comment-dots"></i>
+            </span>
+            <p class="hamburger_item-txt">Chat</p>
+          </a>
+        </li>
+        <li class="hamburger_list">
+          <a class="hamburger_link" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-puzzle-piece"></i>
+            </span>
+            <p class="hamburger_item-txt">Extensions</p>
+          </a>
+        </li>
+        <li class="hamburger_list">
+          <a class="hamburger_link" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-headset"></i>
+            </span>
+            <p class="hamburger_item-txt">Support</p>
+          </a>
+        </li>
+
+        <li class="hamburger_list">
+          <a class="hamburger_link" id="logoutBtn" href="#">
+            <span class="hamurger_link-icon_container">
+              <i class="hamurger_link-icon fas fa-sign-out-alt"></i>
+            </span>
+            <p class="hamburger_item-txt">Logout</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
   <div class="addDriver_popup-container">
     <div class="addDriver_popup">
       <div class="addDriver_popup-content">
         <div class="addDriver_popup-heading">
           <h1 class="addDriver_popup-header">Add Driver</h1>
+          <i class="fas fa-times"></i>
         </div>
+        <p class="errorMessage" id="loginErrMessage"></p>
+        <p class="errorMessage" id="loginErrMessageTwo"></p>
         <form class="addDriver_popup-form" action="">
           <div class="addDriver_popup-form-content">
             <div class="general_info">
               <div class="drive_input-container">
                 <label for="">Frist Name <span class="required">*</span></label>
-                <input type="text" class="drive_input" name="driverFirstName" required />
+                <input type="text" class="drive_input" name="driverFirstName" />
               </div>
 
               <div class="drive_input-container">
@@ -48,22 +329,22 @@
 
               <div class="drive_input-container">
                 <label for="">Email</label>
-                <input type="email" class="drive_input" name="driverEmail" required />
+                <input type="email" class="drive_input" name="driverEmail" />
               </div>
 
               <div class="drive_input-container">
                 <label for="">Phone <span class="required">*</span></label>
-                <input type="text" class="drive_input" name="driverPhoneNumber" required />
+                <input type="text" class="drive_input" name="driverPhoneNumber" />
               </div>
 
               <div class="drive_input-container">
                 <label for="">username <span class="required">*</span></label>
-                <input type="text" class="drive_input" name="driverUsername" required />
+                <input type="text" class="drive_input" name="driverUsername" />
               </div>
 
               <div class="drive_input-container">
                 <label for="">Password (Minimum 8) <span class="required">*</span></label>
-                <input type="password" class="drive_input" name="driverPassword" required />
+                <input type="password" class="drive_input" name="driverPassword" />
               </div>
 
               <div class="drive_input-container">
@@ -84,8 +365,6 @@
                 <label for="">assign to team <span class="required">*</span></label>
                 <select type="text" class="drive_input" name="driverTeam">
                   <option value="0">team 1</option>
-                  <option value="1">team 2</option>
-                  <option value="2">team 3</option>
                 </select>
               </div>
 
@@ -100,13 +379,13 @@
               </div>
               <label class="driver_proile_picture-label" for="driver_proile_picture"><i class="fas fa-folder-open"></i>
                 Upload</label>
-              <input type="file" id="driver_proile_picture" name="driver_proile_picture" required />
+              <input type="file" id="driver_proile_picture" name="driver_proile_picture" />
             </div>
           </div>
           <div class="car_type_select drive_input-container drive_input-container--full">
             <div class="radio_custom">
               <input class="radio_custom-input" value="truck" type="radio" name="transportation_type"
-                id="transportation_truck" required />
+                id="transportation_truck" />
               <label class="radio_custom-label" for="transportation_truck">
                 <i class="fas fa-truck"></i>
               </label>
@@ -144,6 +423,25 @@
         </form>
       </div>
     </div>
+  </div>
+
+  <div class="driver_container">
+    <div class="driver_container-header">
+      <h2>Drivers</h2>
+      <button id="addDriverBtn"> + add Driver</button>
+    </div>
+    <div class="driver_container-content">
+      <div class="driver_container-content-title">
+        <p>Name</p>
+        <p>Team</p>
+        <p>Phone number</p>
+        <p>Status</p>
+      </div>
+      <div class="driver_container-content_container">
+
+      </div>
+    </div>
+
   </div>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>

@@ -295,6 +295,14 @@
     </div>
   </nav>
 
+  <div class="confirmation_contianer_popup">
+    <div class="confirmation_contianer_popup-message">Are you sure</div>
+    <div class="confirmation_contianer_popup-btn_container">
+      <button id="confirmation_contianer_cancel" class="confirmation_contianer_popup-btn">Cancel</button>
+      <button id="confirmation_contianer_dicard" class="confirmation_contianer_popup-btn">dicard</button>
+    </div>
+  </div>
+
   <div class="popup_message">
   </div>
 
@@ -308,6 +316,7 @@
               <i class="fas fa-times"></i>
             </div>
           </div>
+          <p id="addTaskErrorMessage" class="addTaskErrMessage"></p>
           <div class="createTaskItemContainer_form_container">
             <div class="addtask-input_container">
               <select name="taskType" class="addtask-select">
@@ -404,6 +413,8 @@
           </div>
 
         </div>
+        <select name="addTaskDriverId" id="addTaskDrivers">
+        </select>
 
         <div class="createTaskItemContainer_footer">
           <button class="createTaskItemContainer_assignauto">Assign Automatically</button>
@@ -437,7 +448,7 @@
           </li>
         </div>
         <div class="map_info-col__containar">
-          <div class="map_info-col__containar-tabTask" data-taskTab="0">
+          <div class="map_info-col__containar-tabTask map_info-col__containar-tabTask--unassigned" data-taskTab="0">
             <div class="tasks__empty_message-container">
               <p class="tasks__empty_message">
                 no task available for the day
@@ -451,12 +462,15 @@
 
           </div>
 
-          <div class="map_info-col__containar-tabTask" data-taskTab="2">
+          <div class="map_info-col__containar-tabTask map_info-col__containar-tabTask--completed" data-taskTab="2">
             <div class="tasks__empty_message-container">
               <p class="tasks__empty_message">
                 no task available for the day
               </p>
             </div>
+          </div>
+
+          <div class="taskDetailsPopup">
           </div>
         </div>
       </div>
@@ -511,28 +525,7 @@
             </div>
           </div>
           <div data-agentTab="1" class="map_info-col__containar-tabAgnet map_info-col__containar-tabAgnet--active">
-            <div class="map_info-col__item">
-              <div class="map_info-col__item--image">
-                <img src="assets/images/logos/defaul-profile-pic.png" alt="user name" />
-                <div class="agent_activity agent_activity--busy"></div>
-              </div>
-              <div class="map_info-col__item--info">
-                <h3 class="map_info-col__item--name">Salah Mohamed</h3>
-                <p class="map_info-col__item--number">
-                  <span class="map_info-col__item--number_nation">+20</span>
-                  01280919630
-                </p>
-              </div>
-              <div class="map_info-col__item--assign">
-                <div class="map_info-col__item--tasksNumber">
-                  <span class="map_info-col__item--tasks_circle">0</span>
-                  <p class="map_info-col__item--task-p">Task</p>
-                </div>
-                <div class="map_info-col__item--moreInfoBtn">
-                  <i class="fas fa-angle-right"></i>
-                </div>
-              </div>
-            </div>
+
           </div>
           <div data-agentTab="2" class="map_info-col__containar-tabAgnet map_info-col__containar-tabAgent--active">
             <div class="map_info-col__item">
@@ -557,6 +550,8 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="driverDetailsPopup">
           </div>
         </div>
       </div>

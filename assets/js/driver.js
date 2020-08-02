@@ -1,5 +1,94 @@
-var profileInput = document.querySelector("#driver_proile_picture");
+// check if user and redirect ====================
 const uid = Cookies.get("uid");
+if (!uid) {
+  Cookies.remove("logedin");
+  auth.signOut();
+} -
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    Cookies.remove("logedin");
+    Cookies.remove("uid");
+    window.location.replace("signup.html");
+  }
+});
+// =======================
+const popupAreYouSure = (message, btnCancelName, btnDiscardName, callback) => {
+  const popupContainer = document.querySelector(".confirmation_contianer_popup")
+  const popupMessage = document.querySelector(".confirmation_contianer_popup-message")
+  const popupCancelBtn = document.querySelector("#confirmation_contianer_cancel")
+  const popupDiscardBtn = document.querySelector("#confirmation_contianer_dicard")
+
+  popupMessage.innerHTML = message
+  popupCancelBtn.innerHTML = btnCancelName
+  popupDiscardBtn.innerHTML = btnDiscardName
+
+  popupContainer.classList.add("confirmation_contianer_popup--active")
+
+  popupCancelBtn.addEventListener("click", (e) => {
+    e.preventDefault()
+    popupContainer.classList.remove("confirmation_contianer_popup--active")
+    return popupMessage.innerHTML = ""
+  })
+  popupDiscardBtn.addEventListener("click", (e) => {
+    e.preventDefault()
+    popupContainer.classList.remove("confirmation_contianer_popup--active")
+    popupMessage.innerHTML = ""
+    return callback()
+  })
+
+}
+
+// function to close module by esc key or button 
+const closeElement = (closeBtn, modal, validate) => {
+  const selectedModal = document.querySelector(modal)
+  const closeModalBtn = document.querySelector(closeBtn)
+  const checkValidity = () => {
+    if (validate == true) {
+      let numOfEmptyInputs = 0;
+      selectedModal.querySelectorAll("input").forEach((input) => {
+        if (input.value.trim() == "") {
+          return numOfEmptyInputs++
+        }
+      })
+      if (numOfEmptyInputs > 0) {
+        popupAreYouSure(
+          "Are you sure you want to discard this driver??",
+          "Cancel",
+          "Discard",
+          () => {
+            selectedModal.style.display = "none"
+          })
+      }
+    }
+  }
+
+  if (selectedModal.style.display != "block") {
+
+    closeModalBtn.addEventListener("click", (e) => {
+      e.preventDefault()
+      if (validate == true) {
+        checkValidity()
+      } else {
+        selectedModal.style.display = "none"
+      }
+    })
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key == "Escape") {
+        if (validate == true) {
+          checkValidity()
+        } else {
+          selectedModal.style.display = "none"
+        }
+      }
+    })
+
+  }
+
+}
+closeElement("#closeAddDriverModal", ".addDriver_popup-container", true)
+
+var profileInput = document.querySelector("#driver_proile_picture");
 const popUpMessage = document.querySelector(".popup_message");
 profileInput.addEventListener("change", () => {
   var reader = new FileReader();
@@ -140,18 +229,14 @@ addDriverForm.addEventListener("submit", (e) => {
       document.querySelector("#addTaskErrorMessage").innerHTML = "";
     }, 5000);
   }
-
-
-
 })
+
 const addDriverBtn = document.querySelector("#addDriverBtn")
 const addDriverPopupContainer = document.querySelector(".addDriver_popup-container")
 const addDriverPopup = document.querySelector(".addDriver_popup")
 addDriverBtn.addEventListener("click", (e) => {
   e.preventDefault()
   addDriverPopupContainer.style.display = "flex"
-
-
   addDriverPopup.style.display = "block"
   anime({
     targets: ".addDriver_popup",
@@ -159,8 +244,6 @@ addDriverBtn.addEventListener("click", (e) => {
     duration: 800,
     easing: 'easeInOutQuad'
   })
-
-
 })
 
 // read driver
@@ -236,3 +319,109 @@ db.ref(`users/${uid}/drivers`).on("value", (res) => {
 
 
 // delete drive
+
+
+
+
+// Front-End styling
+toggleHideAndShow(
+  ".navigation_hamburgerBtn",
+  ".hamburger_menu",
+  "hamburger_menu--active"
+);
+
+toggleHideAndShow(
+  ".hamburger_btn-back_container",
+  ".hamburger_menu",
+  "hamburger_menu--active"
+);
+
+// toggleHideAndShow(".pickup_btn", ".pickup_contanier", "ocordion_body--active");
+
+// toggleHideAndShow(
+//   ".dropoff_btn",
+//   ".dropoff_container",
+//   "ocordion_body--active"
+// );
+
+toggleHideAndShow(
+  ".notification_btn",
+  ".notification_nav_container",
+  "nav_popup--active"
+);
+
+toggleHideAndShow(
+  ".menu_navigation_btn",
+  ".menu_navigation_container",
+  "nav_popup--active"
+);
+
+// toggleHideAndShow(
+//   ".map_info-col_collaps--tasks",
+//   ".map_tasks",
+//   "map_col--collapsed",
+//   () =>
+//   changeIcon(
+//     ".map_info-col_icon--tasks",
+//     "fa-chevron-left",
+//     "fa-chevron-right"
+//   )
+// );
+
+// toggleHideAndShow(
+//   ".map_info-col_collaps--agents",
+//   ".map_agents",
+//   "map_col--collapsed",
+//   () =>
+//   changeIcon(
+//     ".map_info-col_icon--agents",
+//     "fa-chevron-right",
+//     "fa-chevron-left"
+//   )
+// );
+
+tabSystem(
+  ".map_info-col__subhead-tasks",
+  ".map_info-col__containar-tabTask",
+  "map_info-col__subhead-item--active",
+  "map_info-col__containar-tabTask--active",
+  "tasktab"
+);
+
+tabSystem(
+  ".map_info-col__subhead-agents",
+  ".map_info-col__containar-tabAgnet",
+  "map_info-col__subhead-item--active",
+  "map_info-col__containar-tabAgnet--active",
+  "agentTab"
+);
+
+responsiveJs("900px", () => {
+  const colTasks = document.querySelector(".map_tasks");
+  const colAgents = document.querySelector(".map_agents");
+  const colTasksBtn = document.querySelector(".map_info-col_collaps--tasks");
+  const colAgentsBtn = document.querySelector(".map_info-col_collaps--agents");
+
+  colTasks.classList.add("map_col--collapsed");
+  colAgents.classList.add("map_col--collapsed");
+
+  changeIcon(
+    ".map_info-col_icon--tasks",
+    "fa-chevron-left",
+    "fa-chevron-right"
+  );
+
+  changeIcon(
+    ".map_info-col_icon--agents",
+    "fa-chevron-right",
+    "fa-chevron-left"
+  );
+
+  colTasksBtn.addEventListener("click", () => {
+    colAgents.classList.add("map_col--collapsed");
+  });
+
+  colAgentsBtn.addEventListener("click", () => {
+    colTasks.classList.add("map_col--collapsed");
+  });
+});

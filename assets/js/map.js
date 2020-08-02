@@ -14,21 +14,32 @@ auth.onAuthStateChanged((user) => {
 // =======================
 
 // consts
-const confirmationPopUp = document.querySelector(".confirmation_contianer_popup")
-const confirmationPopUpActiveClass = "confirmation_contianer_popup--active"
-const confirmationMessage = confirmationPopUp.querySelector(".confirmation_contianer_popup-message");
-const confirmationContianerCancel = confirmationPopUp.querySelector("#confirmation_contianer_cancel")
-const confirmationContianerDiscard = confirmationPopUp.querySelector("#confirmation_contianer_dicard")
+const confirmationPopUp = document.querySelector(
+  ".confirmation_contianer_popup"
+);
+const confirmationPopUpActiveClass = "confirmation_contianer_popup--active";
+const confirmationMessage = confirmationPopUp.querySelector(
+  ".confirmation_contianer_popup-message"
+);
+const confirmationContianerCancel = confirmationPopUp.querySelector(
+  "#confirmation_contianer_cancel"
+);
+const confirmationContianerDiscard = confirmationPopUp.querySelector(
+  "#confirmation_contianer_dicard"
+);
 const popUpMessage = document.querySelector(".popup_message");
-// LOGOUT ======== 
-const logoutBtn = document.querySelector("#logoutBtn");
-
-
-logoutBtn.addEventListener("click", () => auth.signOut());
 
 popUpMessage.addEventListener("click", () => {
   popUpMessage.style.display = "none";
-  Cookies.remove("logedin");
+});
+
+// LOGOUT ========
+const logoutBtn = document.querySelector("#logoutBtn");
+logoutBtn.addEventListener("click", () => {
+  auth.signOut().then(() => {
+    Cookies.remove("logedin");
+    Cookies.remove("uid");
+  });
 });
 // ===============
 
@@ -80,14 +91,14 @@ function initMap() {
     });
   };
 
-  // AUTOCOMPLETE MAP SEARCH INPUT FOR PICKUP INPUT 
+  // AUTOCOMPLETE MAP SEARCH INPUT FOR PICKUP INPUT
   var pickupPoint = document.querySelector("#taskPickUpAddressSearchInput");
   var autocompletePickUp = new google.maps.places.Autocomplete(pickupPoint);
   autocompletePickUp.setComponentRestrictions({
     country: ["eg"],
   });
 
-  // AUTOCOMPLETE MAP SEARCH INPUT FOR DELIVERY INPUT 
+  // AUTOCOMPLETE MAP SEARCH INPUT FOR DELIVERY INPUT
   var dropOffInput = document.querySelector("#taskDeliveryAddress");
   var autocompletedropOffInput = new google.maps.places.Autocomplete(
     dropOffInput
@@ -160,13 +171,13 @@ const closeAddTaskPopUpAnimation = () => {
     easing: "easeInOutQuad",
     complete: () => {
       createTaskItemContainerPopup.style.display = "none";
-      addingTaskForm.reset()
+      addingTaskForm.reset();
     },
   });
-}
+};
 
 const closeAddTaskPopUp = () => {
-  const taskForm = document.querySelector(".createTaskItemContainer_form")
+  const taskForm = document.querySelector(".createTaskItemContainer_form");
 
   // CHECK IF THERE IS FILLED INPUTS
   let isEmptyInputs = 0;
@@ -179,27 +190,30 @@ const closeAddTaskPopUp = () => {
     if (isEmptyInputs > 0) {
       // SHOW
       confirmationPopUp.classList.add(confirmationPopUpActiveClass);
-      confirmationMessage.innerHTML = "Are you sure you want to discard this task ?!!"
+      confirmationMessage.innerHTML =
+        "Are you sure you want to discard this task ?!!";
 
       // CANCEL CLICKED
-      confirmationContianerCancel.innerHTML = "Cancel"
+      confirmationContianerCancel.innerHTML = "Cancel";
       confirmationContianerCancel.onclick = () => {
         confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
-        return confirmationMessage.innerHTML = ""
-      }
+        return (confirmationMessage.innerHTML = "");
+      };
 
       // DISCARD CLICKED
-      confirmationContianerDiscard.innerHTML = "Discard"
+      confirmationContianerDiscard.innerHTML = "Discard";
       confirmationContianerDiscard.onclick = () => {
-        confirmationPopUp.classList.remove("confirmation_contianer_popup--active");
-        confirmationMessage.innerHTML = ""
-        closeAddTaskPopUpAnimation()
-      }
+        confirmationPopUp.classList.remove(
+          "confirmation_contianer_popup--active"
+        );
+        confirmationMessage.innerHTML = "";
+        closeAddTaskPopUpAnimation();
+      };
     } else {
-      closeAddTaskPopUpAnimation()
+      closeAddTaskPopUpAnimation();
     }
   });
-}
+};
 
 addTaskBtn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -215,14 +229,14 @@ addTaskBtn.addEventListener("click", (e) => {
 // CLOSE BY BUTTON
 closeTaskBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  closeAddTaskPopUp()
+  closeAddTaskPopUp();
 });
 
 // CLOSE POP UP WITH ESC KEY
 document.body.addEventListener("keydown", function (e) {
   if (createTaskItemContainerPopup.style.display != "none") {
     if (e.key == "Escape" || e.keyCode == 27) {
-      closeAddTaskPopUp()
+      closeAddTaskPopUp();
     }
   }
 });
@@ -260,17 +274,16 @@ addingTaskForm.addEventListener("submit", (e) => {
   const taskDeliveryPickUpBefore = addingTaskForm["taskDeliveryPickUpBefore"];
   const taskDeliveryDescription = addingTaskForm["taskDeliveryDescription"];
   const addTaskDriverId = addingTaskForm["addTaskDriverId"];
-  let driverId
+  let driverId;
   db.ref(`users/${uid}/drivers`).once("value", (drivers) => {
     if (!!drivers) {
-      return driverId = drivers.val().filter((driverData) => {
-        return driverData.status == 0
-      })
-
+      return (driverId = drivers.val().filter((driverData) => {
+        return driverData.status == 0;
+      }));
     } else {
-      driverId = 0
+      driverId = 0;
     }
-  })
+  });
   const addTaskValidate = [
     taskTypeOption,
     taskPickUpName,
@@ -285,15 +298,18 @@ addingTaskForm.addEventListener("submit", (e) => {
     taskDeliveryOrderId,
     taskDeliveryAddress,
     taskDeliveryPickUpBefore,
-    addTaskDriverId
+    addTaskDriverId,
   ];
 
   let emptyInputs = 0;
   addTaskValidate.forEach((input) => {
     if (input.value.trim() == "") {
       input.classList.add("reg-input_err");
-      document.querySelector("#addTaskErrorMessage").innerHTML = "This Fields cant be blank";
-      document.querySelector("#addTaskErrorMessage").classList.add("addTaskErrMessage--active")
+      document.querySelector("#addTaskErrorMessage").innerHTML =
+        "This Fields cant be blank";
+      document
+        .querySelector("#addTaskErrorMessage")
+        .classList.add("addTaskErrMessage--active");
       return (emptyInputs += 1);
     }
   });
@@ -303,7 +319,7 @@ addingTaskForm.addEventListener("submit", (e) => {
 
   const task = {
     driverId: addTaskDriverId,
-    taskUid: '',
+    taskUid: "",
     status: 0,
     type: taskTypeOption.value,
     pickup: {
@@ -364,69 +380,70 @@ addingTaskForm.addEventListener("submit", (e) => {
       setTimeout(() => {
         popUpMessage.style.display = "none";
       }, 5000);
-    })
+    });
 });
 
 // ===================================
-const closeDetailsHeader = () => {
-  const closeTaskDetailsBtn = document.querySelector("#closetaskDetails")
-  closeTaskDetailsBtn.addEventListener("click", () => {
-    const taskDetailedPopUp = document.querySelector(".taskDetailsPopup");
-    anime({
-      targets: ".taskDetailsPopup",
-      duration: 300,
-      height: ["85%", '0'],
-      bottom: ['15%', "-100%"],
-      easing: "linear",
-      complete: () => {
-        taskDetailedPopUp.innerHTML = "";
-        taskDetailedPopUp.style.display = "none"
-      }
-    })
-  })
-}
 
-// DELETE TASK
+// SEE TASK DETAILS ========================
+const closeDetailsHeader = () => {
+  const taskDetailedPopUp = document.querySelector(".taskDetailsPopup");
+  anime({
+    targets: ".taskDetailsPopup",
+    duration: 300,
+    height: ["85%", "0"],
+    bottom: ["15%", "-100%"],
+    easing: "linear",
+    complete: () => {
+      taskDetailedPopUp.innerHTML = "";
+      taskDetailedPopUp.style.display = "none";
+    },
+  });
+};
+
+// DELETE TASK ========================
 const deleteTaskRun = () => {
-  confirmationPopUp.classList.add(confirmationPopUpActiveClass)
-  confirmationMessage.innerHTML = "Are you sure you want to delete this task??!"
+  confirmationPopUp.classList.add(confirmationPopUpActiveClass);
+  confirmationMessage.innerHTML =
+    "Are you sure you want to delete this task??!";
   confirmationContianerCancel.onclick = () => {
-    confirmationPopUp.classList.remove(confirmationPopUpActiveClass)
-    return confirmationMessage.innerHTML = ""
-  }
-  confirmationContianerDiscard.innerHTML = "Delete"
+    confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
+    return (confirmationMessage.innerHTML = "");
+  };
+  confirmationContianerDiscard.innerHTML = "Delete";
   confirmationContianerDiscard.onclick = () => {
-    confirmationPopUp.classList.remove(confirmationPopUpActiveClass)
-    confirmationMessage.innerHTML = ""
+    confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
+    confirmationMessage.innerHTML = "";
 
     //SELECT TASK ID
-    const deleteTaskBtn = document.querySelector("#deleteTask")
-    const deleteId = deleteTaskBtn.dataset.task_id
+    const deleteTaskBtn = document.querySelector("#deleteTask");
+    const deleteId = deleteTaskBtn.dataset.task_id;
 
     const popUpMessgeFunction = (message, delay, status) => {
       popUpMessage.innerHTML = message;
-      popUpMessage.classList.add(`popup_message--${status == 1 ? "succ" : "err"}`);
+      popUpMessage.classList.add(
+        `popup_message--${status == 1 ? "succ" : "err"}`
+      );
       popUpMessage.style.display = "block";
       setTimeout(() => {
         popUpMessage.style.display = "none";
         popUpMessage.innerHTML = "";
       }, delay * 1000);
-    }
+    };
     // DELETE FROM DATABASE
-    db.ref(`users/${uid}/tasks/${deleteId}`).remove()
+    db.ref(`users/${uid}/tasks/${deleteId}`)
+      .remove()
       .then(() => {
-        popUpMessgeFunction("task has been deleted successfully", 5, 1)
+        popUpMessgeFunction("task has been deleted successfully", 5, 1);
       })
       .catch((err) => {
-        popUpMessgeFunction(err.message, 5, 0)
+        popUpMessgeFunction(err.message, 5, 0);
+      });
+  };
+};
+// ====================================
 
-      })
-  }
-
-}
-
-
-// read tasks
+// READ TASKS ================
 db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
   const unAssignedTab = document.querySelector(
     ".map_info-col__containar-tabTask--unassigned"
@@ -438,9 +455,9 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
     ".map_info-col__containar-tabTask--completed"
   );
 
-  unAssignedTab.innerHTML = ""
-  assignedTab.innerHTML = ""
-  completedTab.innerHTML = ""
+  unAssignedTab.innerHTML = "";
+  assignedTab.innerHTML = "";
+  completedTab.innerHTML = "";
 
   tasks.forEach((taskData) => {
     const task = taskData.val();
@@ -510,22 +527,36 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
                           </span>
                         </div>
                       </div>
-                      <div id="taskDetails" data-task_id="${task.taskUid}" class="map_info-col__item-task--more">
+                      <div id="taskDetails" data-task_id="${
+                        task.taskUid
+                      }" class="map_info-col__item-task--more">
                         <i class="map_info-col__item-task--icon_more fas fa-chevron-right "></i>
                       </div>
                       
                     </div>`;
+    let numOfUnAssigned = 0;
+    let numOfAssigned = 0;
+    let numOfCompleted = 0;
 
     if (task.status == 0) {
-      unAssignedTab.innerHTML = "";
+      numOfUnAssigned++;
       unAssignedTab.innerHTML += taskItemHTML;
     } else if (task.status == 1) {
-      assignedTab.innerHTML = "";
+      numOfAssigned++;
       assignedTab.innerHTML += taskItemHTML;
     } else if (task.status == 2) {
-      completedTab.innerHTML = "";
+      numOfCompleted++;
       completedTab.innerHTML += taskItemHTML;
     }
+    document.querySelector(
+      ".map_info-col__subhead-tasks[data-tasktab='0']"
+    ).innerHTML = ` <span>${numOfUnAssigned}</span> UNASSIGNED`;
+    document.querySelector(
+      ".map_info-col__subhead-tasks[data-tasktab='1']"
+    ).innerHTML = ` <span>${numOfAssigned}</span> ASSIGNED`;
+    document.querySelector(
+      ".map_info-col__subhead-tasks[data-tasktab='2']"
+    ).innerHTML = ` <span>${numOfCompleted}</span> COMPLETED`;
   });
 
   seeMoreDetails = document.querySelector("#taskDetails");
@@ -541,7 +572,8 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
 
         const taskDetailsPickupName = taskDetailsValue.pickup.name;
         const taskDetailsPickupPhone = taskDetailsValue.pickup.phone;
-        const taskDetailsPickupDescription = taskDetailsValue.pickup.description;
+        const taskDetailsPickupDescription =
+          taskDetailsValue.pickup.description;
         const taskDetailsPickupBefore = taskDetailsValue.pickup.pickupBefore;
         const taskDetailsPickupOrderId = taskDetailsValue.pickup.orderId;
         const taskDetailsPickupAddress = taskDetailsValue.pickup.address.name;
@@ -550,12 +582,15 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
 
         const taskDetailsDriverName = taskDetailsValue.deliver.name;
         const taskDetailsDriverPhone = taskDetailsValue.deliver.phone;
-        const taskDetailsDriverDescription = taskDetailsValue.deliver.description;
+        const taskDetailsDriverDescription =
+          taskDetailsValue.deliver.description;
         const taskDetailsDriverBefore = taskDetailsValue.deliver.deliverBefore;
         const taskDetailsDriverOrderId = taskDetailsValue.deliver.orderId;
         const taskDetailsDriverAddress = taskDetailsValue.deliver.address.name;
-        const taskDetailsDriverAddressLng = taskDetailsValue.deliver.address.lng;
-        const taskDetailsDriverAddressLat = taskDetailsValue.deliver.address.lat;
+        const taskDetailsDriverAddressLng =
+          taskDetailsValue.deliver.address.lng;
+        const taskDetailsDriverAddressLat =
+          taskDetailsValue.deliver.address.lat;
 
         let detaliedDriverName =
           taskDetailsDriver == 0 ? "Unassigned" : undefined;
@@ -572,9 +607,9 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
         const detaliedStatus = taskDetailsStatusRun();
 
         const detaliedTaskItem = `<div class="taskDetails_header">
-        <h3 class="taskDetails_haeder">Task details</h3>
-        <i onclick="closeDetailsHeader()" id="closetaskDetails" class="fas fa-times"></i>
-      </div>
+          <h3 class="taskDetails_haeder">Task details</h3>
+          <i onclick="closeDetailsHeader()" id="closetaskDetails" class="fas fa-times"></i>
+        </div>
         <div class="taskDetails_content">
           <p><b>driver</b>: ${detaliedDriverName}</p>
           <p><b>status</b>: ${detaliedStatus}</p>
@@ -604,70 +639,77 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
 
         const taskDetailedPopUp = document.querySelector(".taskDetailsPopup");
         taskDetailedPopUp.innerHTML = detaliedTaskItem;
-        taskDetailedPopUp.style.display = "block"
+        taskDetailedPopUp.style.display = "block";
+
         anime({
           targets: ".taskDetailsPopup",
           duration: 300,
-          height: ['0', "85%"],
-          bottom: ["-100%", '15%'],
+          height: ["0", "85%"],
+          bottom: ["-100%", "15%"],
           easing: "linear",
-        })
-
+        });
       });
-
     });
   }
-
 });
 
 // READ DRIVERS
-
 db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
-  const driersContainer = document.querySelector("#colDrivers");
-  const driverTabs = document.querySelectorAll(
-    ".map_info-col__containar-tabAgnet"
-  );
-  driverTabs.forEach((tab) => (tab.innerHTML = ""));
-  // const
-  driversData.forEach((drivers) => {
-    let numOfActive = 0;
-    let numOfInActive = 0;
-    let numOfBusy = 0;
+  const driverTabs = document.querySelectorAll(".map_info-col__containar-tabAgnet");
+  const freeAgentTabSpanContainer = document.querySelector(".map_info-col__subhead-item[data-agentTab='0'] span")
+  const busyAgentTabSpanContainer = document.querySelector(".map_info-col__subhead-item[data-agentTab='1'] span")
+  const inActiveAgentTabSpanContainer = document.querySelector(".map_info-col__subhead-item[data-agentTab='2'] span")
+  let numOfActive = 0;
+  let numOfInActive = 0;
+  let numOfBusy = 0;
 
+  const driverActivityStatusClassString = (status) => {
+    if (status == 0) return "online"
+    if (status == 1) return "busy"
+    if (status == -1) return "offduty"
+    return "offduty"
+  }
+
+  const driverItemTabIndex = (status) => {
+    if (status == 0) return 0
+    if (status == 1) return 1
+    if (status == -1) return 2
+    return 2
+  }
+
+  driverTabs.forEach((tab) => (tab.innerHTML = ""));
+
+  driversData.forEach((drivers) => {
     drivers.forEach((driverData) => {
       const driver = driverData.val();
-
-      const tab = Array.from(driverTabs).filter((driverTab) => {
-        console.log(driver.driverStatus)
-        if (driver.driverStatus == -1) {
-          return driverTab.dataset.agenttab == 2;
-        } else if (driver.driverStatus == 0) {
-          return driverTab.dataset.agenttab == 0;
-        } else {
-          return driverTab.dataset.agenttab == 1;
-        }
-      });
-      console.log(tab)
       const driversFristName = driver.driverFirstName;
       const driversLastName = driver.driverLastName;
       const driversNumber = driver.driverPhoneNumber;
+      const driversStatus = driver.driverStatus;
       const driversProfilePic = driver.driverProfileImage;
+      const numberOfDriverAssignedTasks = JSON.parse(driver.tasks).length
+      const DriverContainerColoumn = document.querySelector(`.map_info-col__containar-tabAgnet[data-agentTab='${driverItemTabIndex(driversStatus)}']`)
 
-      const driverItem = `<div class="map_info-col__item">
+      const tab = Array.from(driverTabs).filter((driverTab) => {
+        if (driver.driverStatus == -1) return driverTab.dataset.agenttab == 2
+        else if (driver.driverStatus == 0) return driverTab.dataset.agenttab == 0;
+        return driverTab.dataset.agenttab == 1;
+      });
+
+      const driverItem =
+        `<div class="map_info-col__item">
           <div class="map_info-col__item--image">
-            <img src="${driversProfilePic}" alt="user name" />
-            <div class="agent_activity agent_activity--online"></div>
+            <img src="${driversProfilePic}" alt="${driversFristName} ${driversLastName}" />
+            <div class="agent_activity agent_activity--${driverActivityStatusClassString(driversStatus)}"></div>
           </div>
           <div class="map_info-col__item--info">
             <h3 class="map_info-col__item--name">${driversFristName} ${driversLastName}</h3>
             <p class="map_info-col__item--number">
-              <span class="map_info-col__item--number_nation">+20</span>
-              ${driversNumber}
-            </p>
+              <span class="map_info-col__item--number_nation">+20</span>${driversNumber}</p>
           </div>
           <div class="map_info-col__item--assign">
             <div class="map_info-col__item--tasksNumber">
-              <span class="map_info-col__item--tasks_circle">${driver.tasks.length}</span>
+              <span class="map_info-col__item--tasks_circle">${numberOfDriverAssignedTasks}</span>
               <p class="map_info-col__item--task-p">Task</p>
             </div>
             <div class="map_info-col__item--moreInfoBtn">
@@ -676,115 +718,54 @@ db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
           </div>
         </div>`;
 
-      tab[0].innerHTML += driverItem;
-      if (driver.driverStatus == -1) {
-        return numOfInActive += 1
-      } else if (driver.driverStatus == 0) {
-        return numOfActive += 1
-      } else {
-        return numOfBusy += 1
-      }
-    });
-    document.querySelector(".map_info-col__subhead-item[data-agentTab='0']").innerHTML = ` <span class="map_info-col_number--agents">${numOfActive}</span> Free`
-    document.querySelector(".map_info-col__subhead-item[data-agentTab='1']").innerHTML = ` <span class="map_info-col_number--agents">${numOfBusy}</span> busy`
-    document.querySelector(".map_info-col__subhead-item[data-agentTab='2']").innerHTML = ` <span class="map_info-col_number--agents">${numOfInActive}</span> Inactive`
-  });
-  // driversArray.forEach((driverData, index) => {
-  //   const drivers = driverData
-  //   console.log(drivers.val())
-  //   console.log(drivers, index)
+      DriverContainerColoumn.innerHTML += driverItem;
 
-  // })
+      if (driver.driverStatus == -1) return (numOfInActive += 1)
+      else if (driver.driverStatus == 0) return (numOfActive += 1)
+      return (numOfBusy += 1);
+    });
+  });
+  const EmptyColumnMessage = (message, isZero, containerTabIndex) => {
+    if (isZero <= 0) {
+      const containerTabIndexEle = document.querySelector(`.map_info-col__containar-tabAgnet[data-agentTab='${driverItemTabIndex(containerTabIndex)}']`)
+      containerTabIndexEle.innerHTML = message
+    }
+  }
+  EmptyColumnMessage("<div class='tasks__empty_message-container'><p class='tasks__empty_message'>you have no Active Drivers</p></div>", numOfActive, 0)
+  EmptyColumnMessage("<div class='tasks__empty_message-container'><p class='tasks__empty_message'>you have no Busy Drivers</p></div>", numOfBusy, 1)
+  EmptyColumnMessage("<div class='tasks__empty_message-container'><p class='tasks__empty_message'>you have no Inactive Drivers</p></div>", numOfInActive, 2)
+
+  freeAgentTabSpanContainer.innerHTML = numOfActive;
+  busyAgentTabSpanContainer.innerHTML = numOfBusy;
+  inActiveAgentTabSpanContainer.innerHTML = numOfInActive;
 });
+
 db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
   driversData.forEach((drivers) => {
     drivers.forEach((driverData) => {
-      console.log(document.querySelector("#addTaskDrivers"))
-      document.querySelector("#addTaskDrivers").innerHTML += `<option>${driverData.val().driverFirstName} ${driverData.val().driverLastName}</option>`
-    })
-    // value=${driverData.key}
-  })
-})
+      document.querySelector("#addTaskDrivers").innerHTML += `<option>${
+        driverData.val().driverFirstName
+      } ${driverData.val().driverLastName}</option>`;
+    });
+  });
+});
 //  ==============================
 
 // Front-End styling
-toggleHideAndShow(
-  ".navigation_hamburgerBtn",
-  ".hamburger_menu",
-  "hamburger_menu--active"
-);
-
-toggleHideAndShow(
-  ".hamburger_btn-back_container",
-  ".hamburger_menu",
-  "hamburger_menu--active"
-);
-
-// toggleHideAndShow(
-//   ".createTaskBtn",
-//   ".createTaskContainer",
-//   "nav_popup--active"
-// );
-
+toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
+toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
 toggleHideAndShow(".pickup_btn", ".pickup_contanier", "ocordion_body--active");
-
-toggleHideAndShow(
-  ".dropoff_btn",
-  ".dropoff_container",
-  "ocordion_body--active"
+toggleHideAndShow(".dropoff_btn", ".dropoff_container", "ocordion_body--active");
+toggleHideAndShow(".notification_btn", ".notification_nav_container", "nav_popup--active");
+toggleHideAndShow(".menu_navigation_btn", ".menu_navigation_container", "nav_popup--active");
+toggleHideAndShow(".map_info-col_collaps--tasks", ".map_tasks", "map_col--collap`sed",
+  () => changeIcon(".map_info-col_icon--tasks", "fa-chevron-left", "fa-chevron-right")
 );
-
-toggleHideAndShow(
-  ".notification_btn",
-  ".notification_nav_container",
-  "nav_popup--active"
+toggleHideAndShow(".map_info-col_collaps--agents", ".map_agents", "map_col--collapsed",
+  () => changeIcon(".map_info-col_icon--agents", "fa-chevron-right", "fa-chevron-left")
 );
-
-toggleHideAndShow(
-  ".menu_navigation_btn",
-  ".menu_navigation_container",
-  "nav_popup--active"
-);
-
-toggleHideAndShow(
-  ".map_info-col_collaps--tasks",
-  ".map_tasks",
-  "map_col--collapsed",
-  () =>
-  changeIcon(
-    ".map_info-col_icon--tasks",
-    "fa-chevron-left",
-    "fa-chevron-right"
-  )
-);
-
-toggleHideAndShow(
-  ".map_info-col_collaps--agents",
-  ".map_agents",
-  "map_col--collapsed",
-  () =>
-  changeIcon(
-    ".map_info-col_icon--agents",
-    "fa-chevron-right",
-    "fa-chevron-left"
-  )
-);
-
-tabSystem(
-  ".map_info-col__subhead-tasks",
-  ".map_info-col__containar-tabTask",
-  "map_info-col__subhead-item--active",
-  "map_info-col__containar-tabTask--active",
-  "tasktab"
-);
-
-tabSystem(
-  ".map_info-col__subhead-agents",
-  ".map_info-col__containar-tabAgnet",
-  "map_info-col__subhead-item--active",
-  "map_info-col__containar-tabAgnet--active",
-  "agentTab"
-);
+tabSystem(".map_info-col__subhead-tasks", ".map_info-col__containar-tabTask", "map_info-col__subhead-item--active", "map_info-col__containar-tabTask--active", "tasktab");
+tabSystem(".map_info-col__subhead-agents", ".map_info-col__containar-tabAgnet", "map_info-col__subhead-item--active", "map_info-col__containar-tabAgnet--active", "agentTab");
 
 responsiveJs("900px", () => {
   const colTasks = document.querySelector(".map_tasks");

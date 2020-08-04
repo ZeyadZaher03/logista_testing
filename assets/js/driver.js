@@ -181,7 +181,7 @@ addDriverForm.addEventListener("submit", (e) => {
       driverUsername: driverPhoneNumber.value,
       driverPassword: driverPassword.value,
       driverRole: driverRole.value,
-      driverTags: [],
+      driverTags: "[]",
       driverTeam: {
         value: driverTeam.value,
         name: driverTeam.innerHTML,
@@ -190,7 +190,8 @@ addDriverForm.addEventListener("submit", (e) => {
       driverAddress: driverAddress.value,
       driverTransportation: transportation_type.value,
       driverProfileImage: "",
-      taskId: 0
+      taskId: 0,
+      tasks: "[]"
 
     }
     console.log(driver)

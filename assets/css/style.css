@@ -33,6 +33,8 @@ body {
 
 .map-page_container {
   display: flex;
+  height: 100%;
+  overflow: hidden;
   flex-direction: column;
 }
 
@@ -201,11 +203,11 @@ p {
 .map_tasks,
 .map_agents {
   height: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
 }
 
-.map_info-col__containar {
-  overflow-y: scroll;
-}
 
 .pac-container {
   z-index: 99999999999999999999;
@@ -398,19 +400,18 @@ p {
   position: relative;
 }
 
-.map_info-col__containar {
-  position: relative;
-  height: 100%;
-}
+
 
 .map_info-col__containar {
+  height: 78%;
   position: relative;
-  height: 100%;
+  overflow-y: scroll;
 }
 
 .map_info-col__containar-tabAgnet,
 .map_info-col__containar-tabTask {
   display: none;
+  height: 100%;
 }
 
 .map_info-col__containar-tabAgnet--active,
@@ -476,9 +477,28 @@ p {
 }
 
 .map_info-col__item-task--more {
-  width: 5rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: #00000015;
+  position: relative;
   text-align: center;
   transition: color 200ms ease;
+  transition: background-color 200ms ease-in-out;
+}
+
+.map_info-col__item-task--more:hover,
+.map_info-col__item-task--more:active {
+  background-color: #0000003f;
+
+}
+
+.map_info-col__item-task--more svg {
+  position: absolute;
+  left: 50%;
+  color: #000;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .map_info-col__item-task--more:hover,
@@ -1653,38 +1673,48 @@ p {
   box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.15);
 }
 
-.driverDetailsPopup,
+.driverDetailsPopup::-webkit-scrollbar,
 .taskDetailsPopup::-webkit-scrollbar {
   width: 3px;
 }
 
 /* Track */
-.driverDetailsPopup,
+.driverDetailsPopup::-webkit-scrollbar-track,
 .taskDetailsPopup::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
 /* Handle */
-.driverDetailsPopup,
+.driverDetailsPopup::-webkit-scrollbar-thumb,
 .taskDetailsPopup::-webkit-scrollbar-thumb {
   background: #888;
 }
 
 /* Handle on hover */
-.driverDetailsPopup,
+.driverDetailsPopup::-webkit-scrollbar-thumb:hover,
 .taskDetailsPopup::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
-.driverDetailsPopup,
+.driverDetailsPopup h3,
 .taskDetailsPopup h3 {
   margin-bottom: 1rem;
 }
 
-.driverDetailsPopup,
+.driverDetailsPopup p,
 .taskDetailsPopup p {
   font-size: 1.5rem;
   margin-bottom: .5rem;
+}
+
+.deleteDetails {
+  padding: 0.5rem 2rem;
+  background: red;
+  border: 0;
+  color: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .taskDetails_content {
@@ -1700,14 +1730,20 @@ p {
 }
 
 #closetaskDetails {
-  height: 2.5rem !important;
-  width: 2.5rem !important;
-  transition: color 200ms ease-in-out;
+  height: 3rem !important;
+  width: 3rem !important;
+  padding: .4rem;
+  background-color: #ececec;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 200ms ease-in-out;
+
 }
 
 #closetaskDetails:hover,
 #closetaskDetails:active {
-  color: #3b3b3b;
+  padding: .3rem;
+  transform: rotate(5deg);
 }
 
 .taskDetails_header svg {

@@ -452,29 +452,27 @@
         </div>
         <div class="map_info-col__containar">
           <div class="map_info-col__containar-tabTask map_info-col__containar-tabTask--unassigned" data-taskTab="0">
-            <div class="tasks__empty_message-container">
-              <p class="tasks__empty_message">
-                no task available for the day
-              </p>
+            <div class="driver_container-loging_container">
+              <img src="assets/images/loading.gif" alt="">
             </div>
           </div>
 
           <div
             class="map_info-col__containar-tabTask map_info-col__containar-tabTask--assigned map_info-col__containar-tabTask--active"
             data-taskTab="1">
-
-          </div>
-
-          <div class="map_info-col__containar-tabTask map_info-col__containar-tabTask--completed" data-taskTab="2">
-            <div class="tasks__empty_message-container">
-              <p class="tasks__empty_message">
-                no task available for the day
-              </p>
+            <div class="driver_container-loging_container">
+              <img src="assets/images/loading.gif" alt="">
             </div>
           </div>
 
-          <div class="taskDetailsPopup">
+          <div class="map_info-col__containar-tabTask map_info-col__containar-tabTask--completed" data-taskTab="2">
+            <div class="driver_container-loging_container">
+              <img src="assets/images/loading.gif" alt="">
+            </div>
           </div>
+
+        </div>
+        <div class="taskDetailsPopup">
         </div>
       </div>
     </div>
@@ -496,7 +494,7 @@
           </li>
           <li data-agentTab="1"
             class="map_info-col__subhead-item map_info-col__subhead-agents map_info-col__subhead-item--active">
-            <span class="map_info-col_number--agents">1</span> BUSY
+            <span class="map_info-col_number--agents">0</span> BUSY
           </li>
           <li data-agentTab="2" class="map_info-col__subhead-item map_info-col__subhead-agents">
             <span class="map_info-col_number--agents">0</span> INACTIVE
@@ -504,73 +502,34 @@
         </div>
         <div id="colDrivers" class="map_info-col__containar">
           <div data-agentTab="0" class="map_info-col__containar-tabAgnet">
-            <div class="map_info-col__item">
-              <div class="map_info-col__item--image">
-                <img src="assets/images/logos/defaul-profile-pic.png" alt="user name" />
-                <div class="agent_activity agent_activity--online"></div>
-              </div>
-              <div class="map_info-col__item--info">
-                <h3 class="map_info-col__item--name">Ahmed Mohamed</h3>
-                <p class="map_info-col__item--number">
-                  <span class="map_info-col__item--number_nation">+20</span>
-                  01280919630
-                </p>
-              </div>
-              <div class="map_info-col__item--assign">
-                <div class="map_info-col__item--tasksNumber">
-                  <span class="map_info-col__item--tasks_circle">0</span>
-                  <p class="map_info-col__item--task-p">Task</p>
-                </div>
-                <div class="map_info-col__item--moreInfoBtn">
-                  <i class="fas fa-angle-right"></i>
-                </div>
-              </div>
+            <div class="driver_container-loging_container">
+              <img src="assets/images/loading.gif" alt="loading...">
             </div>
           </div>
           <div data-agentTab="1" class="map_info-col__containar-tabAgnet map_info-col__containar-tabAgnet--active">
-
-          </div>
-          <div data-agentTab="2" class="map_info-col__containar-tabAgnet map_info-col__containar-tabAgent--active">
-            <div class="map_info-col__item">
-              <div class="map_info-col__item--image">
-                <img src="assets/images/logos/defaul-profile-pic.png" alt="user name" />
-                <div class="agent_activity agent_activity--offduty"></div>
-              </div>
-              <div class="map_info-col__item--info">
-                <h3 class="map_info-col__item--name">Zeyad Mohamed</h3>
-                <p class="map_info-col__item--number">
-                  <span class="map_info-col__item--number_nation">+20</span>
-                  01280919630
-                </p>
-              </div>
-              <div class="map_info-col__item--assign">
-                <div class="map_info-col__item--tasksNumber">
-                  <span class="map_info-col__item--tasks_circle">0</span>
-                  <p class="map_info-col__item--task-p">Task</p>
-                </div>
-                <div class="map_info-col__item--moreInfoBtn">
-                  <i class="fas fa-angle-right"></i>
-                </div>
-              </div>
+            <div class="driver_container-loging_container">
+              <img src="assets/images/loading.gif" alt="loading...">
             </div>
           </div>
-          <div class="driverDetailsPopup">
+          <div data-agentTab="2" class="map_info-col__containar-tabAgnet map_info-col__containar-tabAgent--active">
+            <div class="driver_container-loging_container">
+              <img src="assets/images/loading.gif" alt="loading...">
+            </div>
           </div>
+        </div>
+        <div class="driverDetailsPopup">
         </div>
       </div>
     </div>
   </main>
 
+  <!-- init firebase -->
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
-
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNBlO3zbLUSmjmiCSKJRPvGaYHm6CoIFQ&libraries=places&callback=initMap"
     async></script>
-  <!-- <script
-     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNBlO3zbLUSmjmiCSKJRPvGaYHm6CoIFQ&libraries=places&callback=initMap"
-    async defer></script> -->
 </body>
 
 </html>

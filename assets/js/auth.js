@@ -80,13 +80,12 @@ signupForm.addEventListener("submit", (e) => {
       Cookies.set("uid", uid, {
         expires: 30,
       });
-      console.log(4)
 
       db.ref(`users/${uid}`).set({
         email: cred.user.email,
         fristName: signupFristName.value,
         lastName: signupLastName.value,
-        notifications: []
+        notifications: "[]"
       });
     })
     .catch((err) => {

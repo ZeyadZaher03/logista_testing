@@ -14,7 +14,6 @@ const auth = firebase.auth();
 // const db = firebase.firestore();
 const db = firebase.database();
 
-
 // changing icon by OS theme
 
 lightSchemeIcon = document.querySelector('#themeLightOsIconSite');

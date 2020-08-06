@@ -94,3 +94,89 @@ const responsiveJs = (width, callback) => {
 		}
 	}
 };
+
+// message -> LIKE "ARE YOU SURE YOU WANT TO DELETE THIS USER"
+// btnCancelName -> "CANCEL" OR ANY BUTTON NAME YOU'D LIKE
+// btnDiscardName -> "DELET" OR "DISCARD" ANY BUTTON NAME YOU'D LIKE
+// callback -> THIS WILL BE A FUNCTION THAT WILL EXECUTE WHEN YOU SELECT DELETE
+
+const popupAreYouSure = (message, btnCancelName, btnDiscardName, callback) => {
+	console.log("s");
+	const popupContainer = document.querySelector(".confirmation_contianer_popup")
+	const popupMessage = document.querySelector(".confirmation_contianer_popup-message")
+	const popupCancelBtn = document.querySelector("#confirmation_contianer_cancel")
+	const popupDiscardBtn = document.querySelector("#confirmation_contianer_dicard")
+	popupMessage.innerHTML = message
+	popupCancelBtn.innerHTML = btnCancelName
+	popupDiscardBtn.innerHTML = btnDiscardName
+
+	popupContainer.classList.add("confirmation_contianer_popup--active")
+
+	popupCancelBtn.addEventListener("click", (e) => {
+		e.preventDefault()
+		popupContainer.classList.remove("confirmation_contianer_popup--active")
+		return popupMessage.innerHTML = ""
+	})
+	popupDiscardBtn.addEventListener("click", (e) => {
+		console.log("typeof callback")
+		e.preventDefault()
+		popupContainer.classList.remove("confirmation_contianer_popup--active")
+		popupMessage.innerHTML = ""
+		console.log(typeof callback)
+		if (typeof callback == "function") return callback()
+	})
+}
+
+
+// function to close module by esc key or close button
+// closeBtn -> Close button selector
+// Module -> Module Div selector
+// validate -> should it validate if there is any empty inputs (true , false) 
+const closeElement = (closeBtn, moduleContainer, validate) => {
+
+	const selectedModal = document.querySelector(moduleContainer)
+	const closeModalBtn = document.querySelector(closeBtn)
+	const checkValidity = () => {
+		if (validate == true) {
+			let numOfEmptyInputs = 0;
+			selectedModal.querySelectorAll("input").forEach((input) => {
+				if (input.value.trim() == "") {
+					return numOfEmptyInputs++
+				}
+			})
+			if (numOfEmptyInputs > 0) {
+				popupAreYouSure(
+					"Are you sure you want to discard this driver??",
+					"Cancel",
+					"Discard",
+					() => {
+						selectedModal.style.display = "none"
+					})
+			}
+		}
+	}
+
+	if (selectedModal.style.display != "block") {
+
+		closeModalBtn.addEventListener("click", (e) => {
+			e.preventDefault()
+			if (validate == true) {
+				checkValidity()
+			} else {
+				selectedModal.style.display = "none"
+			}
+		})
+
+		document.addEventListener("keydown", (e) => {
+			if (e.key == "Escape") {
+				if (validate == true) {
+					checkValidity()
+				} else {
+					selectedModal.style.display = "none"
+				}
+			}
+		})
+
+	}
+
+}

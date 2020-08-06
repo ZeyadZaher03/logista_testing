@@ -35,6 +35,7 @@ const popUpMessgeFunction = (message, delay, status) => {
   }, delay * 1000);
 };
 
+
 // LOGOUT ========
 const logoutBtn = document.querySelector("#logoutBtn");
 logoutBtn.addEventListener("click", () => {
@@ -48,56 +49,47 @@ logoutBtn.addEventListener("click", () => {
 // initiate the maps ================
 function initMap() {
   // DASHBOARD MAP
-  var maps = new google.maps.Map(
-    document.querySelector(".map_container"), {
-      zoom: 4,
-      center: {
-        lat: -33,
-        lng: 151,
-      },
-      disableDefaultUI: true,
-    }
-  );
+  var maps = new google.maps.Map(document.querySelector(".map_container"), {
+    zoom: 8,
+    center: {
+      lat: 30.0444,
+      lng: 31.2357,
+    },
+    disableDefaultUI: true,
+  });
 
   // ADDTASK MAP
-  var addTaskMaps = new google.maps.Map(
-    document.querySelector(".createTaskItemContainer_map"), {
-      zoom: 8,
-      center: {
-        lat: -33,
-        lng: 151,
-      },
-      disableDefaultUI: true,
-    }
-  );
+  var addTaskMaps = new google.maps.Map(document.querySelector(".createTaskItemContainer_map"), {
+    zoom: 8,
+    center: {
+      lat: 30.0444,
+      lng: 31.2357,
+    },
+    disableDefaultUI: true,
+  });
 
   // ADD MARKS ON ADD TASKS MAP
   const getDataAndSetMark = (input, autoComplete, map, title) => {
-    google.maps.event.addListener(
-      autoComplete,
-      "place_changed",
-      function () {
-        var place = autoComplete.getPlace().geometry
-          .location;
-        const lat = place.lat();
-        const lng = place.lng();
+    google.maps.event.addListener(autoComplete, "place_changed", function () {
+      var place = autoComplete.getPlace().geometry.location;
+      const lat = place.lat();
+      const lng = place.lng();
 
-        var center = new google.maps.LatLng(lat, lng);
-        map.panTo(center);
+      var center = new google.maps.LatLng(lat, lng);
+      map.panTo(center);
 
-        var addMarker = new google.maps.Marker({
-          position: {
-            lat,
-            lng,
-          },
-          map,
-          title,
-        });
+      var addMarker = new google.maps.Marker({
+        position: {
+          lat,
+          lng,
+        },
+        map,
+        title,
+      });
 
-        input.setAttribute("lng", lng);
-        input.setAttribute("lat", lat);
-      }
-    );
+      input.setAttribute("lng", lng);
+      input.setAttribute("lat", lat);
+    });
   };
 
   // AUTOCOMPLETE MAP SEARCH INPUT FOR PICKUP INPUT
@@ -109,9 +101,7 @@ function initMap() {
 
   // AUTOCOMPLETE MAP SEARCH INPUT FOR DELIVERY INPUT
   var dropOffInput = document.querySelector("#taskDeliveryAddress");
-  var autocompletedropOffInput = new google.maps.places.Autocomplete(
-    dropOffInput
-  );
+  var autocompletedropOffInput = new google.maps.places.Autocomplete(dropOffInput);
 
   // RESTRICT SEARCH TO EGYPT ONLY
   autocompletedropOffInput.setComponentRestrictions({
@@ -119,22 +109,12 @@ function initMap() {
   });
 
   // RUN
-  getDataAndSetMark(
-    pickupPoint,
-    autocompletePickUp,
-    addTaskMaps,
-    "Pick Up point"
-  );
-  getDataAndSetMark(
-    dropOffInput,
-    autocompletedropOffInput,
-    addTaskMaps,
-    "Pick Up point"
-  );
+  getDataAndSetMark(pickupPoint, autocompletePickUp, addTaskMaps, "Pick Up point");
+  getDataAndSetMark(dropOffInput, autocompletedropOffInput, addTaskMaps, "Pick Up point");
 }
 // ===============
 
-// =========== ADDING TASK ===========
+// =========== TASKs ===========
 // CONSTS
 const addingTaskForm = document.querySelector(".createTaskItemContainer_form");
 const addTaskBtn = document.querySelector(".createTaskBtnItem");
@@ -159,9 +139,7 @@ const closeAddTaskPopUpAnimation = () => {
 };
 
 const closeAddTaskPopUp = () => {
-  const taskForm = document.querySelector(
-    ".createTaskItemContainer_form"
-  );
+  const taskForm = document.querySelector(".createTaskItemContainer_form");
 
   // CHECK IF THERE IS FILLED INPUTS
   let isEmptyInputs = 0;
@@ -173,27 +151,20 @@ const closeAddTaskPopUp = () => {
     // IF THERE IS A FILLED INPUT SHOW A CONFIRM ATION MESSAGE
     if (isEmptyInputs > 0) {
       // SHOW
-      confirmationPopUp.classList.add(
-        confirmationPopUpActiveClass
-      );
-      confirmationMessage.innerHTML =
-        "Are you sure you want to discard this task ?!!";
+      confirmationPopUp.classList.add(confirmationPopUpActiveClass);
+      confirmationMessage.innerHTML = "Are you sure you want to discard this task ?!!";
 
       // CANCEL CLICKED
       confirmationContianerCancel.innerHTML = "Cancel";
       confirmationContianerCancel.onclick = () => {
-        confirmationPopUp.classList.remove(
-          confirmationPopUpActiveClass
-        );
+        confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
         return (confirmationMessage.innerHTML = "");
       };
 
       // DISCARD CLICKED
       confirmationContianerDiscard.innerHTML = "Discard";
       confirmationContianerDiscard.onclick = () => {
-        confirmationPopUp.classList.remove(
-          "confirmation_contianer_popup--active"
-        );
+        confirmationPopUp.classList.remove("confirmation_contianer_popup--active");
         confirmationMessage.innerHTML = "";
         closeAddTaskPopUpAnimation();
       };
@@ -203,6 +174,7 @@ const closeAddTaskPopUp = () => {
   });
 };
 
+// ADD TASK FORM VISIBILITY
 addTaskBtn.addEventListener("click", (e) => {
   e.preventDefault();
   createTaskItemContainerPopup.style.display = "flex";
@@ -229,6 +201,7 @@ document.body.addEventListener("keydown", function (e) {
   }
 });
 
+// VALIDATE TASK INPUTS
 addingTaskForm.querySelectorAll("input").forEach((requiredInput) => {
   requiredInput.addEventListener("change", () => {
     if (requiredInput.value != "") {
@@ -236,7 +209,9 @@ addingTaskForm.querySelectorAll("input").forEach((requiredInput) => {
     }
   });
 });
+// ===================================
 
+// ADD TASK
 addingTaskForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const taskType = addingTaskForm["taskType"];
@@ -261,14 +236,10 @@ addingTaskForm.addEventListener("submit", (e) => {
   const taskDeliveryPickUpBefore = addingTaskForm["taskDeliveryPickUpBefore"];
   const taskDeliveryDescription = addingTaskForm["taskDeliveryDescription"];
   const addTaskDriverId = addingTaskForm["addTaskDriverId"];
-  const addTaskDriverIdValue = addTaskDriverId.options[addTaskDriverId.selectedIndex];
+  const addTaskDriverIdOption = addTaskDriverId.options[addTaskDriverId.selectedIndex];
+  const addTaskDriverTeamValue = addTaskDriverIdOption.value === 0 ? addTaskDriverId.options[addTaskDriverId.selectedIndex].dataset.team : 0;
   let driverId;
 
-
-  db.ref(`users/${uid}/drivers`).once("value", (drivers) => {
-    if (!!drivers) return (driverId = drivers.val().filter(driverData => driverData.status == 0));
-    return driverId = 0;
-  });
   const addTaskValidate = [
     taskTypeOption,
     taskPickUpName,
@@ -287,26 +258,21 @@ addingTaskForm.addEventListener("submit", (e) => {
   ];
 
   let emptyInputs = 0;
+
   addTaskValidate.forEach((input) => {
     if (input.value.trim() == "") {
       input.classList.add("reg-input_err");
-      document.querySelector(
-        "#addTaskErrorMessage"
-      ).innerHTML = "This Fields cant be blank";
-      document.querySelector(
-        "#addTaskErrorMessage"
-      ).classList.add("addTaskErrMessage--active");
+      document.querySelector("#addTaskErrorMessage").innerHTML = "This Fields cant be blank";
+      document.querySelector("#addTaskErrorMessage").classList.add("addTaskErrMessage--active");
       return (emptyInputs += 1);
     }
   });
-  if (emptyInputs != 0) {
-    return;
-  }
 
+  if (emptyInputs != 0) return;
   const task = {
-    driverId: addTaskDriverIdValue.value,
+    driverId: addTaskDriverIdOption.value,
     taskUid: "",
-    status: 0,
+    status: -1,
     type: taskTypeOption.value,
     pickup: {
       name: taskPickUpName.value,
@@ -339,18 +305,36 @@ addingTaskForm.addEventListener("submit", (e) => {
   db.ref(`users/${uid}/tasks`)
     .push(task)
     .then((cred) => {
+      const taskUid = cred.getKey();
       cred.update({
-        taskUid: cred.getKey(),
+        taskUid
       });
-      addingTaskForm.reset();
+      if (addTaskDriverIdOption.value != 0) {
+        let pastValue;
+        db.ref(`users/${uid}/drivers/${addTaskDriverTeamValue}/${addTaskDriverIdOption.value}/tasks`)
+          .once("value", (cred) => pastValue = cred.val())
+          .then(() => {
+            let newValue
+            if (pastValue !== null) {
+              newValue = [...pastValue, taskUid]
+            } else {
+              newValue = [taskUid]
+            }
+
+            db.ref(`users/${uid}/drivers/${addTaskDriverTeamValue}/${addTaskDriverIdOption.value}`).update({
+              tasks: newValue,
+              driverStatus: 0
+            });
+          });
+      }
+
       anime({
         targets: ".createTaskItemContainerPopup",
         left: ["0%", "-100%"],
         duration: 500,
         easing: "easeInOutQuad",
         complete: () => {
-          createTaskItemContainerPopup.style.display =
-            "none";
+          createTaskItemContainerPopup.style.display = "none";
         },
       });
       popUpMessage.innerHTML = "task added succesfully";
@@ -369,7 +353,6 @@ addingTaskForm.addEventListener("submit", (e) => {
       }, 5000);
     });
 });
-
 // ===================================
 
 // SEE TASK DETAILS ========================
@@ -387,23 +370,19 @@ const closeDetailsPopup = (selector) => {
     },
   });
 };
+// ====================================
 
 // DELETE TASK ========================
 const deleteTaskRun = () => {
   confirmationPopUp.classList.add(confirmationPopUpActiveClass);
-  confirmationMessage.innerHTML =
-    "Are you sure you want to delete this task??!";
+  confirmationMessage.innerHTML = "Are you sure you want to delete this task??!";
   confirmationContianerCancel.onclick = () => {
-    confirmationPopUp.classList.remove(
-      confirmationPopUpActiveClass
-    );
+    confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
     return (confirmationMessage.innerHTML = "");
   };
   confirmationContianerDiscard.innerHTML = "Delete";
   confirmationContianerDiscard.onclick = () => {
-    confirmationPopUp.classList.remove(
-      confirmationPopUpActiveClass
-    );
+    confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
     confirmationMessage.innerHTML = "";
 
     //SELECT TASK ID
@@ -435,9 +414,9 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
 
   tasks.forEach((taskData) => {
     const task = taskData.val();
-    const isUnassigned = task.status == 0;
-    const isAssigned = task.status == 1;
-    const isCompleted = task.status == 2;
+    const isUnassigned = task.status == -1;
+    const isAssigned = task.status == 0;
+    const isCompleted = task.status == 1;
 
     const driverId = task.driverId;
 
@@ -507,62 +486,56 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
     let numOfAssigned = 0;
     let numOfCompleted = 0;
 
-    if (task.status == 0) {
+    if (task.status == -1) {
       numOfUnAssigned++;
       unAssignedTab.innerHTML += taskItemHTML;
-    } else if (task.status == 1) {
+    } else if (task.status == 0) {
       numOfAssigned++;
       assignedTab.innerHTML += taskItemHTML;
-    } else if (task.status == 2) {
+    } else if (task.status == 1) {
       numOfCompleted++;
       completedTab.innerHTML += taskItemHTML;
     }
-    document.querySelector(
-      ".map_info-col__subhead-tasks[data-tasktab='0']"
-    ).innerHTML = ` <span>${numOfUnAssigned}</span> UNASSIGNED`;
-    document.querySelector(
-      ".map_info-col__subhead-tasks[data-tasktab='1']"
-    ).innerHTML = ` <span>${numOfAssigned}</span> ASSIGNED`;
-    document.querySelector(
-      ".map_info-col__subhead-tasks[data-tasktab='2']"
-    ).innerHTML = ` <span>${numOfCompleted}</span> COMPLETED`;
+
+    document.querySelector(".map_info-col__subhead-tasks[data-tasktab='0'] span").innerHTML = numOfUnAssigned;
+    document.querySelector(".map_info-col__subhead-tasks[data-tasktab='1'] span").innerHTML = numOfAssigned;
+    document.querySelector(".map_info-col__subhead-tasks[data-tasktab='2'] span").innerHTML = numOfCompleted;
   });
 
   const seeMoreTaskDetailsButtons = document.querySelectorAll(".map_info-col__item-task");
   const showMoreTaskDetailsPopup = (seeMoreTaskDetailsButton) => {
     const taskId = seeMoreTaskDetailsButton.dataset.task_id;
-    db.ref(`users/${uid}/tasks/${taskId}`).on("value",
-      (detailedTask) => {
-        const taskDetailsValue = detailedTask.val();
-        const taskDetailsType = taskDetailsValue.type;
-        const taskDetailsDriver = taskDetailsValue.driverId;
-        const taskDetailsStatus = taskDetailsValue.status;
-        const taskDetailsPickupName = taskDetailsValue.pickup.name;
-        const taskDetailsPickupPhone = taskDetailsValue.pickup.phone;
-        const taskDetailsPickupDescription = taskDetailsValue.pickup.description;
-        const taskDetailsPickupBefore = taskDetailsValue.pickup.pickupBefore;
-        const taskDetailsPickupOrderId = taskDetailsValue.pickup.orderId;
-        const taskDetailsPickupAddress = taskDetailsValue.pickup.address.name;
-        const taskDetailsPickupAddressLng = taskDetailsValue.pickup.address.lng;
-        const taskDetailsPickupAddressLat = taskDetailsValue.pickup.address.lat;
-        const taskDetailsDriverName = taskDetailsValue.deliver.name;
-        const taskDetailsDriverPhone = taskDetailsValue.deliver.phone;
-        const taskDetailsDriverDescription = taskDetailsValue.deliver.description;
-        const taskDetailsDriverBefore = taskDetailsValue.deliver.deliverBefore;
-        const taskDetailsDriverOrderId = taskDetailsValue.deliver.orderId;
-        const taskDetailsDriverAddress = taskDetailsValue.deliver.address.name;
-        const taskDetailsDriverAddressLng = taskDetailsValue.deliver.address.lng;
-        const taskDetailsDriverAddressLat = taskDetailsValue.deliver.address.lat;
+    db.ref(`users/${uid}/tasks/${taskId}`).on("value", (detailedTask) => {
+      const taskDetailsValue = detailedTask.val();
+      const taskDetailsType = taskDetailsValue.type;
+      const taskDetailsDriver = taskDetailsValue.driverId;
+      const taskDetailsStatus = taskDetailsValue.status;
+      const taskDetailsPickupName = taskDetailsValue.pickup.name;
+      const taskDetailsPickupPhone = taskDetailsValue.pickup.phone;
+      const taskDetailsPickupDescription = taskDetailsValue.pickup.description;
+      const taskDetailsPickupBefore = taskDetailsValue.pickup.pickupBefore;
+      const taskDetailsPickupOrderId = taskDetailsValue.pickup.orderId;
+      const taskDetailsPickupAddress = taskDetailsValue.pickup.address.name;
+      const taskDetailsPickupAddressLng = taskDetailsValue.pickup.address.lng;
+      const taskDetailsPickupAddressLat = taskDetailsValue.pickup.address.lat;
+      const taskDetailsDriverName = taskDetailsValue.deliver.name;
+      const taskDetailsDriverPhone = taskDetailsValue.deliver.phone;
+      const taskDetailsDriverDescription = taskDetailsValue.deliver.description;
+      const taskDetailsDriverBefore = taskDetailsValue.deliver.deliverBefore;
+      const taskDetailsDriverOrderId = taskDetailsValue.deliver.orderId;
+      const taskDetailsDriverAddress = taskDetailsValue.deliver.address.name;
+      const taskDetailsDriverAddressLng = taskDetailsValue.deliver.address.lng;
+      const taskDetailsDriverAddressLat = taskDetailsValue.deliver.address.lat;
 
-        let detaliedDriverName = taskDetailsDriver == 0 ? "Unassigned" : "undefined";
+      let detaliedDriverName = taskDetailsDriver == 0 ? "Unassigned" : "undefined";
 
-        const taskDetailsStatusRun = (status) => {
-          if (status == -1) return "Unassigned";
-          else if (status == 0) return "Assigned";
-          return "completed";
-        };
+      const taskDetailsStatusRun = (status) => {
+        if (status == -1) return "Unassigned";
+        else if (status == 0) return "Assigned";
+        return "completed";
+      };
 
-        const detaliedTaskItem = `<div class="taskDetails_header">
+      const detaliedTaskItem = `<div class="taskDetails_header">
             <h3 class="taskDetails_haeder">Task details</h3>
             <i onclick = "closeDetailsPopup('.taskDetailsPopup')" id="closetaskDetails" class="fas fa-times"> </i>
           </div>
@@ -591,34 +564,55 @@ db.ref(`users/${uid}/tasks`).on("value", function (tasks) {
             <button class="deleteDetails" data-task_id=${taskId} onclick="deleteTaskRun()" id="deleteTask">Delete</button>
           </div>`;
 
-        const taskDetailedPopUp = document.querySelector(".taskDetailsPopup");
-        taskDetailedPopUp.innerHTML = detaliedTaskItem;
-        taskDetailedPopUp.style.display = "block";
+      const taskDetailedPopUp = document.querySelector(".taskDetailsPopup");
+      taskDetailedPopUp.innerHTML = detaliedTaskItem;
+      taskDetailedPopUp.style.display = "block";
 
-        anime({
-          targets: ".taskDetailsPopup",
-          duration: 500,
-          height: ["0", "100%"],
-          bottom: ["-0%", "0%"],
-          easing: "easeInQuad",
-        });
-      }
-    );
+      anime({
+        targets: ".taskDetailsPopup",
+        duration: 500,
+        height: ["0", "100%"],
+        bottom: ["-0%", "0%"],
+        easing: "easeInQuad",
+      });
+    });
   };
   if (seeMoreTaskDetailsButtons.length >= 0) {
-    seeMoreTaskDetailsButtons.forEach(
-      (seeMoreTaskDetailsButton) => {
-        seeMoreTaskDetailsButton.addEventListener("click", () => showMoreTaskDetailsPopup(seeMoreTaskDetailsButton));
-      }
-    );
+    seeMoreTaskDetailsButtons.forEach((seeMoreTaskDetailsButton) => {
+      seeMoreTaskDetailsButton.addEventListener("click", () =>
+        showMoreTaskDetailsPopup(seeMoreTaskDetailsButton)
+      );
+    });
   }
 });
+// ====================================
 
+// SELECT OPTION WITH DRIVERS
+db.ref(`users/${uid}/drivers`).on("value", function (snapshot) {
+  document.querySelector(
+    "#addTaskDrivers"
+  ).innerHTML += `<option value="0" selected>Please select a driver</option>`;
+  snapshot.forEach((driverTeam) => {
+    driverTeam.forEach((driverData) => {
+      const driver = driverData.val();
+      const driverFristName = driver.driverFirstName;
+      const driverTeamValue = driver.driverTeam.value;
+      const driverLastName = driver.driverLastName;
+      const driverId = driverData.key;
+      document.querySelector(
+        "#addTaskDrivers"
+      ).innerHTML += `<option data-team=${driverTeamValue} value="${driverId}" >${driverFristName} ${driverLastName}</option>`;
+    });
+  });
+});
+
+// ====================================
+
+// DRIVER
 // DELETE DRIVER
 const deleteDriverRun = () => {
   confirmationPopUp.classList.add(confirmationPopUpActiveClass);
-  confirmationMessage.innerHTML =
-    "Are you sure you want to delete this Driver??!";
+  confirmationMessage.innerHTML = "Are you sure you want to delete this Driver??!";
   confirmationContianerCancel.onclick = () => {
     confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
     return (confirmationMessage.innerHTML = "");
@@ -671,13 +665,30 @@ db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
     return 2;
   };
 
+  const onChangeAssignTask = (assignTaskToDriverInput, driverTeam, driverId) => {
+    let pastValue;
+    db.ref(`users/${uid}/drivers/${driverTeam}/${driverId}/tasks`)
+      .once("value", (snapshot) => pastValue = snapshot.val())
+      .then(() => {
+        let newValue
+        if (pastValue !== null) {
+          newValue = [...pastValue, assignTaskToDriverInput.options[assignTaskToDriverInput.selectedIndex].value]
+        } else {
+          newValue = [assignTaskToDriverInput.options[assignTaskToDriverInput.selectedIndex].value]
+        }
+        db.ref(`users/${uid}/drivers/${driverTeam}/${driverId}`).update({
+          tasks: newValue,
+          driverStatus: 1
+        })
+      });
+  }
+
+
   driverTabs.forEach((tab) => (tab.innerHTML = ""));
 
   driversData.forEach((drivers) => {
-
     drivers.forEach((snapshot) => {
       const driver = snapshot.val();
-      console.log(driver)
       const driverId = snapshot.key;
       const driverTeamValue = driver.driverTeam.value;
       const driversFristName = driver.driverFirstName;
@@ -685,11 +696,13 @@ db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
       const driversNumber = driver.driverPhoneNumber;
       const driversStatus = driver.driverStatus;
       const driversProfilePic = driver.driverProfileImage;
-      const numberOfDriverAssignedTasks = JSON.parse(driver.tasks).length;
-      const DriverContainerColoumn = document.querySelector(`.map_info-col__containar-tabAgnet[data-agentTab='${driverItemTabIndex(driversStatus)}']`);
+      const numberOfDriverAssignedTasks = driver.tasks ? driver.tasks.length : 0;
+      const DriverContainerColoumn =
+        document.querySelector(`.map_info-col__containar-tabAgnet[data-agentTab='${driverItemTabIndex(
+					driversStatus
+				)}']`);
 
-      const driverItem =
-        `<div class="map_info-col__item map_info-col__item-driver" data-driver_team="${driverTeamValue}" data-driver_id="${driverId}">
+      const driverItem = `<div class="map_info-col__item map_info-col__item-driver" data-driver_team="${driverTeamValue}" data-driver_id="${driverId}">
           <div class="map_info-col__item--image">
             <img src="${driversProfilePic}" alt="${driversFristName} ${driversLastName}" />
             <div class="agent_activity agent_activity--${driverActivityStatusClassString(driversStatus)}"></div>
@@ -713,62 +726,88 @@ db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
         const driverItemId = driverItemEle.dataset.driver_id;
         const driverItemTeam = driverItemEle.dataset.driver_team;
         const driverMoreDetailsPopup = document.querySelector(".driverDetailsPopup");
-        driverMoreDetailsPopup.innerHTML = ""
-        db.ref(`users/${uid}/drivers/${driverItemTeam}/${driverItemId}`).on("value", (snapshot) => {
-          const driverData = snapshot.val()
-          const driverId = snapshot.key
-          const driverUsername = driverData.driverUsername
-          const driverFirstName = driverData.driverFirstName
-          const driverLastName = driverData.driverLastName
-          const driverStatusData = driverData.driverStatus
-          const driverEmail = driverData.driverEmail
-          const driverTeamValue = driverData.driverTeam.value
-          const driverTeamName = driverData.driverTeam.name
-          const driverPhoneNumber = driverData.driverPhoneNumber
-          const driverDriveBy = driverData.driverTransportation
+        driverMoreDetailsPopup.innerHTML = "";
+        db.ref(`users/${uid}/drivers/${driverItemTeam}/${driverItemId}`).on(
+          "value",
+          (snapshot) => {
+            const driverData = snapshot.val();
+            const driverId = snapshot.key;
+            const driverUsername = driverData.driverUsername;
+            const driverFirstName = driverData.driverFirstName;
+            const driverLastName = driverData.driverLastName;
+            const driverStatusData = driverData.driverStatus;
+            const driverEmail = driverData.driverEmail;
+            const driverTeamValue = driverData.driverTeam.value;
+            const driverTeamName = driverData.driverTeam.name;
+            const driverPhoneNumber = driverData.driverPhoneNumber;
 
-          const driverStatusMessage = (statusData) => {
-            if (statusData == 0) return "Free"
-            else if (statusData == 1) return "Busy"
-            else if (statusData == -1) return "Inactive"
-            return "Inactive"
-          }
+            const activeTaskId = driverData.tasks ? driverData.tasks[0] : 0;
+            const driverDriveBy = driverData.driverTransportation;
 
-          const detaliedTaskItem =
-            `<div class="taskDetails_header">
-                  <h3 class="taskDetails_haeder">Driver details</h3>
-                  <i onclick="closeDetailsPopup('.driverDetailsPopup')" id="closetaskDetails" class="fas fa-times"></i>
-                </div>
-                <div class="taskDetails_content">
-                  <p><b>Driver Name</b>: ${driverFirstName} ${driverLastName}</p>
-                  <p><b>Status</b>:${driverStatusMessage(driverStatusData)}</p>
-                  <p><b>Drive By</b>: ${driverDriveBy}</p>
-                  <p><b>Email Address</b>: ${driverEmail}</p>
-                  <p><b>Phone number</b>: ${driverPhoneNumber}</p>
-                  <p><b>Username</b>: ${driverUsername}</p>
-                  <p><b>Team</b>: ${driverTeamName}</p>
-                  <button class="deleteDetails" data-driver_team=${driverTeamValue} data-driver_id=${driverId} onclick="deleteDriverRun()"id="deleteDriver">Delete</button>
-                </div>
-            </div>`;
-          driverMoreDetailsPopup.innerHTML = detaliedTaskItem;
-          driverMoreDetailsPopup.style.display = "block";
-
-          anime({
-            targets: ".driverDetailsPopup",
-            duration: 500,
-            height: ["0", "100%"],
-            bottom: ["-0%", "0%"],
-            easing: "easeInQuad",
+            const driverStatusMessage = (statusData) => {
+              if (statusData == 0) return "Free";
+              else if (statusData == 1) return "Busy";
+              else if (statusData == -1) return "Inactive";
+              return "Inactive";
+            };
+            let activeDriverTaskName;
+            db.ref(`users/${uid}/tasks/${activeTaskId}`)
+              .once("value", (snapshot) => {
+                if (activeTaskId !== 0) {
+                  return activeDriverTaskName = snapshot.val().pickup.email
+                }
+              })
+              .then(() => {
+                const detaliedTaskItem =
+                  `<div class="taskDetails_header">
+                        <h3 class="taskDetails_haeder">Driver details</h3>
+                        <i onclick="closeDetailsPopup('.driverDetailsPopup')" id="closetaskDetails" class="fas fa-times"></i>
+                      </div>
+                      <div class="taskDetails_content">
+                        <p><b>Driver Name</b>: ${driverFirstName} ${driverLastName}</p>
+                        <p><b>Status</b>:${driverStatusMessage(driverStatusData)}</p>
+                        <p><b>Drive By</b>: ${driverDriveBy}</p>
+                        <p><b>Email Address</b>: ${driverEmail}</p>
+                        <p><b>Phone number</b>: ${driverPhoneNumber}</p>
+                        <p><b>Username</b>: ${driverUsername}</p>
+                        <p><b>Team</b>: ${driverTeamName}</p>
+                        <p><b>Active Task</b>: ${"activeDriverTaskName"}</p>
+                        <select id="changeTask"></select>
+                        <button class="deleteDetails" data-driver_team=${driverTeamValue} data-driver_id=${driverId} onclick="deleteDriverRun()"id="deleteDriver">Delete</button>
+                      </div>`;
+                driverMoreDetailsPopup.innerHTML = detaliedTaskItem;
+                const addTaskToDriverSelect = document.querySelector("#changeTask")
+                document.querySelector("#changeTask").addEventListener("change", (e) => {
+                  e.preventDefault()
+                  onChangeAssignTask(addTaskToDriverSelect, driverTeamValue, driverId)
+                })
+                driverMoreDetailsPopup.style.display = "block";
+                db.ref(`users/${uid}/tasks`).on("value", (snapshot) => {
+                  addTaskToDriverSelect.innerHTML += `<option value="${0}">assign task</option>`
+                  snapshot.forEach((taskData) => {
+                    const taskId = taskData.key
+                    const pickupPlaceName = taskData.val().pickup.address.name
+                    const deliverPlaceName = taskData.val().pickup.address.name
+                    if (taskData.val().driverId == 0) return addTaskToDriverSelect.remove()
+                    addTaskToDriverSelect.innerHTML += `<option value="${taskId}"> ${pickupPlaceName} to ${deliverPlaceName}</option>`
+                  })
+                });
+                anime({
+                  targets: ".driverDetailsPopup",
+                  duration: 500,
+                  height: ["0", "100%"],
+                  bottom: ["-0%", "0%"],
+                  easing: "easeInQuad"
+                });
+              })
           });
-        });
+
       };
       DriverContainerColoumn.innerHTML += driverItem;
       const driverItems = document.querySelectorAll(".map_info-col__item-driver");
       if (driverItems.length >= 0) {
         driverItems.forEach((driverItem) => {
-          driverItem.addEventListener("click", () => {
-            showMoreDriverDetailsPopup(driverItem)
-          });
+          driverItem.addEventListener("click", () => showMoreDriverDetailsPopup(driverItem));
         });
       }
 
@@ -780,12 +819,15 @@ db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
         numOfBusy += 1;
       }
     });
+    // console.log("zeyad")
   });
 
   const EmptyColumnMessage = (message, isZero, containerTabIndex) => {
     if (isZero <= 0) {
-      const containerTabIndexEle = document.querySelector(`.map_info-col__containar-tabAgnet[data-agentTab='${driverItemTabIndex(containerTabIndex)}']`);
-      containerTabIndexEle.innerHTML = `<div class='tasks__empty_message-container' ><p class='tasks__empty_message'>${message} </p></div>`
+      const containerTabIndexEle = document.querySelector(
+        `.map_info-col__containar-tabAgnet[data-agentTab='${driverItemTabIndex(containerTabIndex)}']`
+      );
+      containerTabIndexEle.innerHTML = `<div class='tasks__empty_message-container' ><p class='tasks__empty_message'>${message} </p></div>`;
     }
   };
 
@@ -799,101 +841,37 @@ db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
 
   const seeMoreTaskDetailsButtons = document.querySelectorAll("#taskDetails");
 });
-
-db.ref(`users/${uid}/drivers`).on("value", function (driversData) {
-  driversData.forEach((drivers) => {
-    drivers.forEach((driverData) => {
-      document.querySelector("#addTaskDrivers")
-        .innerHTML += `<option value="${driverData.key}" >${driverData.val().driverFirstName} ${driverData.val().driverLastName}</option>`;
-    });
-  });
-});
 //  ==============================
 
 // Front-End styling
 toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
-toggleHideAndShow(
-  ".hamburger_btn-back_container",
-  ".hamburger_menu",
-  "hamburger_menu--active"
-);
+toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
 toggleHideAndShow(".pickup_btn", ".pickup_contanier", "ocordion_body--active");
-toggleHideAndShow(
-  ".dropoff_btn",
-  ".dropoff_container",
-  "ocordion_body--active"
+toggleHideAndShow(".dropoff_btn", ".dropoff_container", "ocordion_body--active");
+toggleHideAndShow(".notification_btn", ".notification_nav_container", "nav_popup--active");
+toggleHideAndShow(".menu_navigation_btn", ".menu_navigation_container", "nav_popup--active");
+toggleHideAndShow(".map_info-col_collaps--tasks", ".map_tasks", "map_col--collap`sed", () =>
+  changeIcon(".map_info-col_icon--tasks", "fa-chevron-left", "fa-chevron-right")
 );
-toggleHideAndShow(
-  ".notification_btn",
-  ".notification_nav_container",
-  "nav_popup--active"
+toggleHideAndShow(".map_info-col_collaps--agents", ".map_agents", "map_col--collapsed", () =>
+  changeIcon(".map_info-col_icon--agents", "fa-chevron-right", "fa-chevron-left")
 );
-toggleHideAndShow(
-  ".menu_navigation_btn",
-  ".menu_navigation_container",
-  "nav_popup--active"
-);
-toggleHideAndShow(
-  ".map_info-col_collaps--tasks",
-  ".map_tasks",
-  "map_col--collap`sed",
-  () =>
-  changeIcon(
-    ".map_info-col_icon--tasks",
-    "fa-chevron-left",
-    "fa-chevron-right"
-  )
-);
-toggleHideAndShow(
-  ".map_info-col_collaps--agents",
-  ".map_agents",
-  "map_col--collapsed",
-  () =>
-  changeIcon(
-    ".map_info-col_icon--agents",
-    "fa-chevron-right",
-    "fa-chevron-left"
-  )
-);
-tabSystem(
-  ".map_info-col__subhead-tasks",
-  ".map_info-col__containar-tabTask",
-  "map_info-col__subhead-item--active",
-  "map_info-col__containar-tabTask--active",
-  "tasktab"
-);
-tabSystem(
-  ".map_info-col__subhead-agents",
-  ".map_info-col__containar-tabAgnet",
-  "map_info-col__subhead-item--active",
-  "map_info-col__containar-tabAgnet--active",
-  "agentTab"
-);
+
+tabSystem(".map_info-col__subhead-tasks", ".map_info-col__containar-tabTask", "map_info-col__subhead-item--active", "map_info-col__containar-tabTask--active", "tasktab");
+tabSystem(".map_info-col__subhead-agents", ".map_info-col__containar-tabAgnet", "map_info-col__subhead-item--active", "map_info-col__containar-tabAgnet--active", "agentTab");
 
 responsiveJs("900px", () => {
   const colTasks = document.querySelector(".map_tasks");
   const colAgents = document.querySelector(".map_agents");
-  const colTasksBtn = document.querySelector(
-    ".map_info-col_collaps--tasks"
-  );
-  const colAgentsBtn = document.querySelector(
-    ".map_info-col_collaps--agents"
-  );
+  const colTasksBtn = document.querySelector(".map_info-col_collaps--tasks");
+  const colAgentsBtn = document.querySelector(".map_info-col_collaps--agents");
 
   colTasks.classList.add("map_col--collapsed");
   colAgents.classList.add("map_col--collapsed");
 
-  changeIcon(
-    ".map_info-col_icon--tasks",
-    "fa-chevron-left",
-    "fa-chevron-right"
-  );
+  changeIcon(".map_info-col_icon--tasks", "fa-chevron-left", "fa-chevron-right");
 
-  changeIcon(
-    ".map_info-col_icon--agents",
-    "fa-chevron-right",
-    "fa-chevron-left"
-  );
+  changeIcon(".map_info-col_icon--agents", "fa-chevron-right", "fa-chevron-left");
 
   colTasksBtn.addEventListener("click", () => {
     colAgents.classList.add("map_col--collapsed");
@@ -905,7 +883,3 @@ responsiveJs("900px", () => {
 });
 
 //  ==========================================
-
-// db.ref(`users/${uid}/drivers/0/-MDOWo-VAP3IfAT72aWd`).update("value", (e) => {
-//   console.log(e.val());
-// });

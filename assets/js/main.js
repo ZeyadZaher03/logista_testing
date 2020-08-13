@@ -1,10 +1,10 @@
 // Your web app's Firebase configuration
 var firebaseConfig = {
-    apiKey: "AIzaSyCX54Ej_pzEV3lwwK9QNmpcbMUmc-mAxug",
-    authDomain: "logista-282218.firebaseapp.com",
-    databaseURL: "https://logista-282218.firebaseio.com",
-    projectId: "logista-282218",
-    appId: "1:747873953165:web:ff0d3b01fa6dd2671c89c4",
+	apiKey: "AIzaSyCX54Ej_pzEV3lwwK9QNmpcbMUmc-mAxug",
+	authDomain: "logista-282218.firebaseapp.com",
+	databaseURL: "https://logista-282218.firebaseio.com",
+	projectId: "logista-282218",
+	appId: "1:747873953165:web:ff0d3b01fa6dd2671c89c4",
 };
 
 // Initialize Firebase
@@ -16,15 +16,17 @@ const db = firebase.database();
 
 // changing icon by OS theme
 
-lightSchemeIcon = document.querySelector('#themeLightOsIconSite');
-darkSchemeIcon = document.querySelector('#themeDarkOsIconSite');
+lightSchemeIcon = document.querySelector("#themeLightOsIconSite");
+darkSchemeIcon = document.querySelector("#themeDarkOsIconSite");
 
 function onUpdate() {
-    if (matcher.matches) {
-        lightSchemeIcon.remove();
-        document.head.append(darkSchemeIcon);
-    } else {
-        document.head.append(lightSchemeIcon);
-        darkSchemeIcon.remove();
-    }
+	if (matcher.matches) {
+		lightSchemeIcon.remove();
+		document.head.append(darkSchemeIcon);
+	} else {
+		document.head.append(lightSchemeIcon);
+		darkSchemeIcon.remove();
+	}
 }
+
+const uid = Cookies.get("uid");

@@ -101,14 +101,14 @@ const responsiveJs = (width, callback) => {
 // callback -> THIS WILL BE A FUNCTION THAT WILL EXECUTE WHEN YOU SELECT DELETE
 
 const popupAreYouSure = (message, btnCancelName, btnDiscardName, callback) => {
-	console.log("s");
+
 	const popupContainer = document.querySelector(".confirmation_contianer_popup")
 	const popupMessage = document.querySelector(".confirmation_contianer_popup-message")
 	const popupCancelBtn = document.querySelector("#confirmation_contianer_cancel")
 	const popupDiscardBtn = document.querySelector("#confirmation_contianer_dicard")
-	popupMessage.innerHTML = message
-	popupCancelBtn.innerHTML = btnCancelName
-	popupDiscardBtn.innerHTML = btnDiscardName
+	popupMessage.innerHTML = message ? message : "are you sure?"
+	popupCancelBtn.innerHTML = btnCancelName ? btnCancelName : "Cancel"
+	popupDiscardBtn.innerHTML = btnDiscardName ? btnDiscardName : "Remove"
 
 	popupContainer.classList.add("confirmation_contianer_popup--active")
 
@@ -118,11 +118,9 @@ const popupAreYouSure = (message, btnCancelName, btnDiscardName, callback) => {
 		return popupMessage.innerHTML = ""
 	})
 	popupDiscardBtn.addEventListener("click", (e) => {
-		console.log("typeof callback")
 		e.preventDefault()
 		popupContainer.classList.remove("confirmation_contianer_popup--active")
 		popupMessage.innerHTML = ""
-		console.log(typeof callback)
 		if (typeof callback == "function") return callback()
 	})
 }

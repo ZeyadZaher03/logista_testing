@@ -30,3 +30,5 @@ function onUpdate() {
 }
 
 const uid = Cookies.get("uid");
+const tasksQuery = `users/${uid}/tasks`
+const driversQuery = `users/${uid}/drivers`

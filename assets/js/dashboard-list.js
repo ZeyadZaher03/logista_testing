@@ -61,7 +61,6 @@ function initMap(mapObject) {
 				const bound = new google.maps.LatLngBounds();
 				const mapObjectPickup = mapObject.pickup;
 				const mapObjectDropoff = mapObject.dropOff;
-
 				bound.extend(new google.maps.LatLng(mapObjectPickup.lat, mapObjectPickup.lng));
 				bound.extend(new google.maps.LatLng(mapObjectDropoff.lat, mapObjectDropoff.lng));
 
@@ -79,10 +78,9 @@ function initMap(mapObject) {
 					lat: parseFloat(mapObjectDropoff.lat),
 					lng: parseFloat(mapObjectDropoff.lng),
 				};
-
+				const trafficLayer = new google.maps.TrafficLayer();
 				const seeTaskLocationMap = new google.maps.Map(
-					document.querySelector(".popupTaskMap"),
-					{
+					document.querySelector(".popupTaskMap"), {
 						zoom: 10,
 						center: {
 							lat: centerLat,
@@ -91,6 +89,7 @@ function initMap(mapObject) {
 						disableDefaultUI: true,
 					}
 				);
+				trafficLayer.setMap(seeTaskLocationMap);
 
 				const addMarker = (myLatLng, map, title, iconSrc, arrayToPush) => {
 					const marker = new google.maps.Marker({
@@ -102,16 +101,7 @@ function initMap(mapObject) {
 					return marker;
 				};
 
-				const pickupMarker = addMarker(pickupLatLng, seeTaskLocationMap, "Pickup Point");
-				const dropoffMarker = addMarker(dropoffLatLng, seeTaskLocationMap, "Dropoff Point");
-
-				taskDetailsMapMarkersArray.push(pickupMarker);
-				taskDetailsMapMarkersArray.push(dropoffMarker);
-
-				// console.log(taskDetailsMapMarkersArray)
-
-				directionsService.route(
-					{
+				directionsService.route({
 						origin: pickupLatLng,
 						destination: dropoffLatLng,
 						travelMode: google.maps.TravelMode.DRIVING,
@@ -120,7 +110,12 @@ function initMap(mapObject) {
 					(res, status) => {
 						if (status === "OK") {
 							directionsDisplay.setMap(seeTaskLocationMap);
-							directionsDisplay.setDirections(seeTaskLocationMap);
+							// directionsDisplay.setOptions({
+							// 	polylineOptions: {
+							// 		strokeColor: "red",
+							// 	},
+							// });
+							directionsDisplay.setDirections(res);
 						} else {
 							directionsDisplay.setMap(null);
 							directionsDisplay.setDirections(null);
@@ -137,8 +132,16 @@ function initMap(mapObject) {
 	}
 }
 // ===============
+// ===============
+// ===============
+// ===============
+// ===============
+// ===============
+// ===============
+
 const task_container = document.querySelector("#taskListContainer");
-const createTaskListElement = (snapshot) => {
+const createTaskListElement = (databaseTasksItemSnapshot) => {
+	// creat elements
 	const taskItem = document.createElement("div");
 	const locationFromEle = document.createElement("p");
 	const locationToEle = document.createElement("p");
@@ -150,6 +153,7 @@ const createTaskListElement = (snapshot) => {
 	const editTaskButton = document.createElement("button");
 	const deleteTaskButton = document.createElement("button");
 
+	// organizing and ordering elements
 	taskItem.appendChild(locationFromEle);
 	taskItem.appendChild(locationToEle);
 	taskItem.appendChild(taskESTEle);
@@ -160,32 +164,30 @@ const createTaskListElement = (snapshot) => {
 	taskItem.appendChild(editTaskButton);
 	taskItem.appendChild(deleteTaskButton);
 
+	//add classes
 	locationFromEle.classList.add("list_item");
 	locationToEle.classList.add("list_item");
-
-	deleteTaskButton.classList.add("defaultButton");
-	editTaskButton.classList.add("defaultButton");
-	deleteTaskButton.classList.add("defaultButton--delete");
-	editTaskButton.classList.add("defaultButton--edit");
+	deleteTaskButton.classList.add("defaultButton", "defaultButton--delete");
+	editTaskButton.classList.add("defaultButton", "defaultButton--edit");
 	taskItem.classList.add("task_item-list");
 	moreTaskDetailsButton.classList.add("list_buttons", "taskDetails-popupBtn", "defaultButton--edit");
 	openLocationButton.classList.add("openLocationPopup", "list_buttons", "defaultButton--edit");
 
-	const task = snapshot.val();
-	const taskId = snapshot.key;
+	// retriving data from database
+	const task = databaseTasksItemSnapshot.val();
+	const taskId = databaseTasksItemSnapshot.key;
 	const taskDriverId = task.driverId;
 	const taskDriverTeam = task.driverTeam;
 	const pickAddressName = task.pickup.address.name;
 	const deliverAddressName = task.deliver.address.name;
 	const status = task.status;
 
+	// filling elements with data
 	locationFromEle.innerHTML = pickAddressName;
 	locationToEle.innerHTML = deliverAddressName;
-	taskStatusEle.innerHTML = status;
+	taskStatusEle.innerHTML = statusText(status);
 	taskESTEle.innerHTML = "18min";
-
 	DriverNameSelect.innerHTML = "";
-
 	moreTaskDetailsButton.innerHTML = "See More";
 	moreTaskDetailsButton.dataset.id = taskId;
 	if (taskDriverId != 0) {
@@ -194,32 +196,35 @@ const createTaskListElement = (snapshot) => {
 	}
 	openLocationButton.innerHTML = "View on Map";
 	deleteTaskButton.dataset.id = taskId;
-
 	editTaskButton.innerHTML = "Edit";
 	deleteTaskButton.innerHTML = "Delete";
 	taskItem.dataset.id = taskId;
 
+	//load drivers in drivers select
 	fillDriversSelect(taskDriverId, DriverNameSelect);
+
+	// add task item to task container
 	task_container.appendChild(taskItem);
 };
 
 const listViewTasksItemGenrator = () => {
 	db.ref(`users/${uid}/tasks`).on("value", (snapshot) => {
 		task_container.innerHTML = "";
+		// add taskitem for each task
 		snapshot.forEach((taskData) => {
 			createTaskListElement(taskData);
 		});
 
+		// task item functions
 		const viewTaskDetailsButtons = document.querySelectorAll(".taskDetails-popupBtn");
-		const closeTaskDetailsButton = document.querySelector(".closeBtnContianer");
 		openTaskDetailsPopup(viewTaskDetailsButtons);
-		closeTaskDetailsPopup(closeTaskDetailsButton);
+		closePopupDefault(".closeBtnContianer", ".taskDetailsPopup_container", "#taskDetailsPopup_bgshade");
 		viewTaskOnTheMapPopup();
 		deleteTask();
-		closePopupDefault("#closeTaskLocation", ".popupTaskMap_container", ".taskDetailsPopup_list", () => {
+		closePopupDefault("#closeTaskLocation", ".popupTaskMap_container", "#popupTaskMap_bgshade", () => {
 			initMap({
 				mapType: "popupSeeLocation",
-				mode: "remove",
+				mode: "remove"
 			});
 		});
 	});
@@ -250,347 +255,7 @@ const fillDriversSelect = (driverTaskId, driverSelect) => {
 		driverSelect.innerHTML += `<option>Select A driver</option>`;
 	});
 };
-listViewTasksItemGenrator();
 
-toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
-toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
-toggleHideAndShow(".notification_btn", ".notification_nav_container", "nav_popup--active");
-toggleHideAndShow(".menu_navigation_btn", ".menu_navigation_container", "nav_popup--active");
-tabSystem(
-	".map_info-col__subhead-tasks",
-	".map_info-col__containar-tabTask",
-	"map_info-col__subhead-item--active",
-	"map_info-col__containar-tabTask--active",
-	"tasktab"
-);
-tabSystem(
-	".map_info-col__subhead-agents",
-	".map_info-col__containar-tabAgnet",
-	"map_info-col__subhead-item--active",
-	"map_info-col__containar-tabAgnet--active",
-	"agentTab"
-);
-
-const addingTaskForm = document.querySelector(".createTaskItemContainer_form");
-const addTaskBtn = document.querySelector(".createTaskBtnItem");
-const addTaskBtnSec = document.querySelector("#addDriverBtn");
-const closeTaskBtn = document.querySelector(".createTaskItemContainer_close");
-const closeTaskkey = document.querySelector(".createTaskItemContainer_close");
-const createTaskItemContainerPopup = document.querySelector(".createTaskItemContainerPopup");
-const createTaskItemContainer = document.querySelector(".createTaskItemContainer");
-const createTaskItemContainer_btn = document.querySelector(".createTaskItemContainer_btn");
-
-// FUNCTIONS
-const closeAddTaskPopUpAnimation = () => {
-	anime({
-		targets: ".createTaskItemContainerPopup",
-		left: ["0%", "-100%"],
-		duration: 500,
-		easing: "easeInOutQuad",
-		complete: () => {
-			createTaskItemContainerPopup.style.display = "none";
-			addingTaskForm.reset();
-		},
-	});
-};
-
-const closeAddTaskPopUp = () => {
-	const taskForm = document.querySelector(".createTaskItemContainer_form");
-
-	// CHECK IF THERE IS FILLED INPUTS
-	let isEmptyInputs = 0;
-
-	taskForm.querySelectorAll("input").forEach((input) => {
-		if (input.value.trim() != "") {
-			return (isEmptyInputs += 1);
-		}
-		// IF THERE IS A FILLED INPUT SHOW A CONFIRM ATION MESSAGE
-		if (isEmptyInputs > 0) {
-			// SHOW
-			confirmationPopUp.classList.add(confirmationPopUpActiveClass);
-			confirmationMessage.innerHTML = "Are you sure you want to discard this task ?!!";
-
-			// CANCEL CLICKED
-			confirmationContianerCancel.innerHTML = "Cancel";
-			confirmationContianerCancel.onclick = () => {
-				confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
-				return (confirmationMessage.innerHTML = "");
-			};
-
-			// DISCARD CLICKED
-			confirmationContianerDiscard.innerHTML = "Discard";
-			confirmationContianerDiscard.onclick = () => {
-				confirmationPopUp.classList.remove("confirmation_contianer_popup--active");
-				confirmationMessage.innerHTML = "";
-				closeAddTaskPopUpAnimation();
-			};
-		} else {
-			closeAddTaskPopUpAnimation();
-		}
-	});
-};
-
-// CLOSE BY BUTTON
-closeTaskBtn.addEventListener("click", (e) => {
-	e.preventDefault();
-	closeAddTaskPopUp();
-});
-
-// CLOSE POP UP WITH ESC KEY
-document.body.addEventListener("keydown", function (e) {
-	if (createTaskItemContainerPopup.style.display != "none") {
-		if (e.key == "Escape" || e.keyCode == 27) {
-			closeAddTaskPopUp();
-		}
-	}
-});
-
-// VALIDATE TASK INPUTS
-addingTaskForm.querySelectorAll("input").forEach((requiredInput) => {
-	requiredInput.addEventListener("change", () => {
-		if (requiredInput.value != "") {
-			requiredInput.classList.remove("reg-input_err");
-		}
-	});
-});
-// ===================================
-
-// ADD TASK
-const openAddTask = (button) => {
-	// ADD TASK FORM VISIBILITY
-	button.addEventListener("click", (e) => {
-		e.preventDefault();
-		createTaskItemContainerPopup.style.display = "flex";
-		anime({
-			targets: ".createTaskItemContainerPopup",
-			left: ["-100%", "0%"],
-			duration: 500,
-			easing: "easeInOutQuad",
-		});
-	});
-};
-
-openAddTask(addTaskBtn);
-openAddTask(addTaskBtnSec);
-
-addingTaskForm.addEventListener("submit", (e) => {
-	e.preventDefault();
-	const taskType = addingTaskForm["taskType"];
-	const taskTypeOption = taskType.options[taskType.selectedIndex];
-	const taskPickUpName = addingTaskForm["taskPickUpName"];
-	const taskPickUpNumber = addingTaskForm["taskPickUpNumber"];
-	const taskPickUpEmail = addingTaskForm["taskPickUpEmail"];
-	const taskPickUpOrderId = addingTaskForm["taskPickUpOrderId"];
-	const taskPickUpAddress = addingTaskForm["taskPickUpAddress"];
-	const taskPickUpAddressValue = taskPickUpAddress;
-	const taskPickUpAddressLng = taskPickUpAddress.getAttribute("lng");
-	const taskPickUpAddressLat = taskPickUpAddress.getAttribute("lat");
-	const taskPickUpPickUpBefore = addingTaskForm["taskPickUpPickUpBefore"];
-	const taskPickUpDescription = addingTaskForm["taskPickUpDescription"];
-	const taskDeliveryName = addingTaskForm["taskDeliveryName"];
-	const taskDeliveryPhone = addingTaskForm["taskDeliveryNumber"];
-	const taskDeliveryEmail = addingTaskForm["taskDeliveryEmail"];
-	const taskDeliveryOrderId = addingTaskForm["taskDeliveryOrderId"];
-	const taskDeliveryAddress = addingTaskForm["taskDeliveryAddress"];
-	const taskDeliveryAddressLng = taskDeliveryAddress.getAttribute("lng");
-	const taskDeliveryAddressLat = taskDeliveryAddress.getAttribute("lat");
-	const taskDeliveryPickUpBefore = addingTaskForm["taskDeliveryPickUpBefore"];
-	const taskDeliveryDescription = addingTaskForm["taskDeliveryDescription"];
-	const addTaskDriverId = addingTaskForm["addTaskDriverId"];
-	const addTaskDriverIdOption = addTaskDriverId.options[addTaskDriverId.selectedIndex];
-	const addTaskDriverTeamValue =
-		addTaskDriverIdOption.value === 0
-			? addTaskDriverId.options[addTaskDriverId.selectedIndex].dataset.team
-			: 0;
-	let driverId;
-
-	const addTaskValidate = [
-		taskTypeOption,
-		taskPickUpName,
-		taskPickUpNumber,
-		taskPickUpEmail,
-		taskPickUpOrderId,
-		taskPickUpAddressValue,
-		taskPickUpPickUpBefore,
-		taskDeliveryName,
-		taskDeliveryPhone,
-		taskDeliveryEmail,
-		taskDeliveryOrderId,
-		taskDeliveryAddress,
-		taskDeliveryPickUpBefore,
-		addTaskDriverId,
-	];
-
-	let emptyInputs = 0;
-
-	addTaskValidate.forEach((input) => {
-		if (input.value.trim() == "") {
-			input.classList.add("reg-input_err");
-			document.querySelector("#addTaskErrorMessage").innerHTML = "This Fields cant be blank";
-			document.querySelector("#addTaskErrorMessage").classList.add("addTaskErrMessage--active");
-			return (emptyInputs += 1);
-		}
-	});
-
-	if (emptyInputs != 0) return;
-	const task = {
-		driverId: addTaskDriverIdOption.value,
-		taskUid: "",
-		status: -1,
-		type: taskTypeOption.value,
-		pickup: {
-			name: taskPickUpName.value,
-			email: taskPickUpEmail.value,
-			phone: taskPickUpNumber.value,
-			orderId: taskPickUpOrderId.value,
-			description: taskPickUpDescription.value,
-			pickupBefore: taskPickUpPickUpBefore.value,
-			address: {
-				name: taskPickUpAddress.value,
-				lat: taskPickUpAddressLat,
-				lng: taskPickUpAddressLng,
-			},
-		},
-		deliver: {
-			name: taskDeliveryName.value,
-			email: taskDeliveryEmail.value,
-			phone: taskDeliveryPhone.value,
-			orderId: taskDeliveryOrderId.value,
-			description: taskDeliveryDescription.value,
-			deliverBefore: taskDeliveryPickUpBefore.value,
-			address: {
-				name: taskDeliveryAddress.value,
-				lat: taskDeliveryAddressLat,
-				lng: taskDeliveryAddressLng,
-			},
-		},
-	};
-
-	db.ref(`users/${uid}/tasks`)
-		.push(task)
-		.then((cred) => {
-			const taskUid = cred.getKey();
-			cred.update({
-				taskUid,
-			});
-			if (addTaskDriverIdOption.value != 0) {
-				let pastValue;
-				db.ref(
-					`users/${uid}/drivers/${addTaskDriverTeamValue}/${addTaskDriverIdOption.value}/tasks`
-				)
-					.once("value", (cred) => (pastValue = cred.val()))
-					.then(() => {
-						let newValue;
-						if (pastValue !== null) {
-							newValue = [...pastValue, taskUid];
-						} else {
-							newValue = [taskUid];
-						}
-
-						db.ref(
-							`users/${uid}/drivers/${addTaskDriverTeamValue}/${addTaskDriverIdOption.value}`
-						).update({
-							tasks: newValue,
-							driverStatus: 0,
-						});
-					});
-			}
-
-			anime({
-				targets: ".createTaskItemContainerPopup",
-				left: ["0%", "-100%"],
-				duration: 500,
-				easing: "easeInOutQuad",
-				complete: () => {
-					createTaskItemContainerPopup.style.display = "none";
-				},
-			});
-			popUpMessage.innerHTML = "task added succesfully";
-			popUpMessage.classList.add("popup_message--succ");
-			popUpMessage.style.display = "block";
-			setTimeout(() => {
-				popUpMessage.style.display = "none";
-			}, 5000);
-		})
-		.catch((err) => {
-			popUpMessage.innerHTML = err.message;
-			popUpMessage.classList.add("popup_message--err");
-			popUpMessage.style.display = "block";
-			setTimeout(() => {
-				popUpMessage.style.display = "none";
-			}, 5000);
-		});
-});
-
-// ===================================
-
-// Task Details ===================================
-const taskDetailsPopup = document.querySelector(".taskDetailsPopup_container");
-const taskDetailsPopupBackgroundShade = taskDetailsPopup.parentNode;
-
-const OpenTaskDetailsAnimation = () => {
-	taskDetailsPopupBackgroundShade.style.display = "flex";
-	anime({
-		targets: ".taskDetailsPopup_list",
-		opacity: 1,
-		duration: 150,
-		easing: "easeInOutQuad",
-		complete: () => {
-			taskDetailsPopup.style.display = "flex";
-			anime({
-				targets: ".taskDetailsPopup_container",
-				scale: [0.5, 1],
-				opacity: 1,
-				duration: 200,
-				easing: "easeInOutQuad",
-			});
-		},
-	});
-};
-
-const openTaskDetailsPopup = (buttons) => {
-	buttons.forEach((button) => {
-		button.addEventListener("click", () => {
-			OpenTaskDetailsAnimation();
-			const id = button.dataset.id;
-			const driverId = button.dataset.Did;
-			const teamValue = button.dataset.team;
-			addDataInTaskDetailsContainer(id, driverId, teamValue);
-		});
-	});
-};
-
-const closeTaskDetailsAnimation = () => {
-	anime({
-		targets: ".taskDetailsPopup_container",
-		scale: [1, 0.5],
-		opacity: 0,
-		duration: 200,
-		easing: "easeInOutQuad",
-		complete: () => {
-			taskDetailsPopup.style.display = "none";
-			anime({
-				targets: ".taskDetailsPopup_list",
-				opacity: 0,
-				duration: 100,
-				easing: "easeInOutQuad",
-				complete: () => {
-					taskDetailsPopupBackgroundShade.style.display = "none";
-				},
-			});
-		},
-	});
-};
-
-const closeTaskDetailsPopup = (button) => {
-	button.addEventListener("click", () => closeTaskDetailsAnimation());
-
-	document.addEventListener("keydown", (e) => {
-		if (document.querySelector(".taskDetailsPopup_container").parentNode.style.display === "none") return;
-		if (e.key != "Escape") return;
-		closeTaskDetailsAnimation();
-	});
-};
 
 const addDataInTaskDetailsContainer = (taskId, driverId, teamValue) => {
 	const taskDetailsContainer = document.querySelector(".taskDetailsPopup_content");
@@ -627,9 +292,8 @@ const addDataInTaskDetailsContainer = (taskId, driverId, teamValue) => {
 	const taskDetailsDriverPhoneNumber = taskDetailsContainer.querySelector(
 		`[data-task-item="phoneNumber_driver"]`
 	);
+	const taskDetailsDriverImage = taskDetailsContainer.querySelector(`[data-task-item="image_driver"]`);
 
-	const taskDetailsEdit = taskDetailsContainer.querySelector(`.defaultButton--edit`);
-	const taskDetailsDelete = taskDetailsContainer.querySelector(`.defaultButton--delete`);
 
 	// fetching from database
 	db.ref(`users/${uid}/tasks/${taskId}`).once("value", (snapshot) => {
@@ -673,7 +337,6 @@ const addDataInTaskDetailsContainer = (taskId, driverId, teamValue) => {
 
 	//if it's assingend to driver
 	if (!!driverId || !!teamValue) {
-		console.log(`users/${uid}/drivers/${teamValue}/${driverId}`);
 		db.ref(`users/${uid}/drivers/${teamValue}/${driverId}`).once("value", (snapshot) => {
 			// fetch from db
 			const driver = snapshot.val();
@@ -684,6 +347,8 @@ const addDataInTaskDetailsContainer = (taskId, driverId, teamValue) => {
 			//filling selectors
 			taskDetailsDriverName.innerHTML = name;
 			taskDetailsDriverEmail.innerHTML = email;
+			taskDetailsDriverImage.src = driver.driverProfileImage
+			taskDetailsDriverImage.setAttribute("alt", name)
 			taskDetailsDriverUsername.innerHTML = username;
 			taskDetailsDriverPhoneNumber.innerHTML = phone;
 		});
@@ -708,9 +373,8 @@ const deleteTask = () => {
 
 const defaultPopupOpenAnimation = (popupSelector, parentSelector) => {
 	const popup = document.querySelector(popupSelector);
-	const parentPopup = document.querySelector(parentSelector);
 
-	parentPopup.style.display = "flex";
+	popup.parentNode.style.display = "flex";
 	anime({
 		targets: parentSelector,
 		opacity: 1,
@@ -726,28 +390,6 @@ const defaultPopupOpenAnimation = (popupSelector, parentSelector) => {
 				easing: "easeInOutQuad",
 			});
 		},
-	});
-};
-
-const viewTaskOnTheMapPopup = () => {
-	const openTaskMapButtons = document.querySelectorAll(".openLocationPopup");
-	openTaskMapButtons.forEach((openTaskMapButton) => {
-		openTaskMapButton.addEventListener("click", () => {
-			const taskId = openTaskMapButton.parentNode.dataset.id;
-			db.ref(`users/${uid}/tasks/${taskId}/pickup/address`).on("value", (snapshot) => {
-				const pickupAddress = snapshot.val();
-				db.ref(`users/${uid}/tasks/${taskId}/deliver/address`).on("value", (snapshot) => {
-					const deliverAddress = snapshot.val();
-					initMap({
-						mapType: "popupSeeLocation",
-						pickup: pickupAddress,
-						dropOff: deliverAddress,
-						mode: "add",
-					});
-				});
-			});
-			defaultPopupOpenAnimation(".popupTaskMap_container", ".taskDetailsPopup_list");
-		});
 	});
 };
 
@@ -789,3 +431,335 @@ const closePopupDefault = (buttonSelector, selector, parentSelector, callback) =
 		if (typeof callback === "function") callback();
 	});
 };
+
+const viewTaskOnTheMapPopup = () => {
+	const openTaskMapButtons = document.querySelectorAll(".openLocationPopup");
+	openTaskMapButtons.forEach((openTaskMapButton) => {
+		openTaskMapButton.addEventListener("click", () => {
+			const taskId = openTaskMapButton.parentNode.dataset.id;
+			db.ref(`users/${uid}/tasks/${taskId}/pickup/address`).on("value", (snapshot) => {
+				const pickupAddress = snapshot.val();
+				db.ref(`users/${uid}/tasks/${taskId}/deliver/address`).on("value", (snapshot) => {
+					const deliverAddress = snapshot.val();
+					initMap({
+						mapType: "popupSeeLocation",
+						pickup: pickupAddress,
+						dropOff: deliverAddress,
+						mode: "add",
+					});
+				});
+			});
+			defaultPopupOpenAnimation(".popupTaskMap_container", "#popupTaskMap_bgshade");
+		});
+	});
+};
+
+const openTaskDetailsPopup = (buttons) => {
+	buttons.forEach((button) => {
+		button.addEventListener("click", () => {
+			defaultPopupOpenAnimation(".taskDetailsPopup_container", "#taskDetailsPopup_bgshade");
+			const id = button.dataset.id;
+			const driverId = button.dataset.Did;
+			const teamValue = button.dataset.team;
+			addDataInTaskDetailsContainer(id, driverId, teamValue);
+		});
+	});
+};
+
+const statusText = (status) => {
+	if (status == -1) return "Unassigned"
+	else if (status == 0) return "Assigned"
+	else if (status == 1) return "Completed"
+	return "Unassigned"
+}
+
+listViewTasksItemGenrator();
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+// ===================
+
+// toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
+// toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
+// toggleHideAndShow(".notification_btn", ".notification_nav_container", "nav_popup--active");
+// toggleHideAndShow(".menu_navigation_btn", ".menu_navigation_container", "nav_popup--active");
+// tabSystem(
+// 	".map_info-col__subhead-tasks",
+// 	".map_info-col__containar-tabTask",
+// 	"map_info-col__subhead-item--active",
+// 	"map_info-col__containar-tabTask--active",
+// 	"tasktab"
+// );
+// tabSystem(
+// 	".map_info-col__subhead-agents",
+// 	".map_info-col__containar-tabAgnet",
+// 	"map_info-col__subhead-item--active",
+// 	"map_info-col__containar-tabAgnet--active",
+// 	"agentTab"
+// );
+
+// const addingTaskForm = document.querySelector(".createTaskItemContainer_form");
+// const addTaskBtn = document.querySelector(".createTaskBtnItem");
+// const addTaskBtnSec = document.querySelector("#addDriverBtn");
+// const closeTaskBtn = document.querySelector(".createTaskItemContainer_close");
+// const closeTaskkey = document.querySelector(".createTaskItemContainer_close");
+// const createTaskItemContainerPopup = document.querySelector(".createTaskItemContainerPopup");
+// const createTaskItemContainer = document.querySelector(".createTaskItemContainer");
+// const createTaskItemContainer_btn = document.querySelector(".createTaskItemContainer_btn");
+
+// // FUNCTIONS
+// const closeAddTaskPopUpAnimation = () => {
+// 	anime({
+// 		targets: ".createTaskItemContainerPopup",
+// 		left: ["0%", "-100%"],
+// 		duration: 500,
+// 		easing: "easeInOutQuad",
+// 		complete: () => {
+// 			createTaskItemContainerPopup.style.display = "none";
+// 			addingTaskForm.reset();
+// 		},
+// 	});
+// };
+
+// const closeAddTaskPopUp = () => {
+// 	const taskForm = document.querySelector(".createTaskItemContainer_form");
+
+// 	// CHECK IF THERE IS FILLED INPUTS
+// 	let isEmptyInputs = 0;
+
+// 	taskForm.querySelectorAll("input").forEach((input) => {
+// 		if (input.value.trim() != "") {
+// 			return (isEmptyInputs += 1);
+// 		}
+// 		// IF THERE IS A FILLED INPUT SHOW A CONFIRM ATION MESSAGE
+// 		if (isEmptyInputs > 0) {
+// 			// SHOW
+// 			confirmationPopUp.classList.add(confirmationPopUpActiveClass);
+// 			confirmationMessage.innerHTML = "Are you sure you want to discard this task ?!!";
+
+// 			// CANCEL CLICKED
+// 			confirmationContianerCancel.innerHTML = "Cancel";
+// 			confirmationContianerCancel.onclick = () => {
+// 				confirmationPopUp.classList.remove(confirmationPopUpActiveClass);
+// 				return (confirmationMessage.innerHTML = "");
+// 			};
+
+// 			// DISCARD CLICKED
+// 			confirmationContianerDiscard.innerHTML = "Discard";
+// 			confirmationContianerDiscard.onclick = () => {
+// 				confirmationPopUp.classList.remove("confirmation_contianer_popup--active");
+// 				confirmationMessage.innerHTML = "";
+// 				closeAddTaskPopUpAnimation();
+// 			};
+// 		} else {
+// 			closeAddTaskPopUpAnimation();
+// 		}
+// 	});
+// };
+
+// // CLOSE BY BUTTON
+// closeTaskBtn.addEventListener("click", (e) => {
+// 	e.preventDefault();
+// 	closeAddTaskPopUp();
+// });
+
+// // CLOSE POP UP WITH ESC KEY
+// document.body.addEventListener("keydown", function (e) {
+// 	if (createTaskItemContainerPopup.style.display != "none") {
+// 		if (e.key == "Escape" || e.keyCode == 27) {
+// 			closeAddTaskPopUp();
+// 		}
+// 	}
+// });
+
+// // VALIDATE TASK INPUTS
+// addingTaskForm.querySelectorAll("input").forEach((requiredInput) => {
+// 	requiredInput.addEventListener("change", () => {
+// 		if (requiredInput.value != "") {
+// 			requiredInput.classList.remove("reg-input_err");
+// 		}
+// 	});
+// });
+
+// // ADD TASK
+// const openAddTask = (button) => {
+// 	// ADD TASK FORM VISIBILITY
+// 	button.addEventListener("click", (e) => {
+// 		e.preventDefault();
+// 		createTaskItemContainerPopup.style.display = "flex";
+// 		anime({
+// 			targets: ".createTaskItemContainerPopup",
+// 			left: ["-100%", "0%"],
+// 			duration: 500,
+// 			easing: "easeInOutQuad",
+// 		});
+// 	});
+// };
+
+// openAddTask(addTaskBtn);
+// openAddTask(addTaskBtnSec);
+
+// addingTaskForm.addEventListener("submit", (e) => {
+// 	e.preventDefault();
+// 	const taskType = addingTaskForm["taskType"];
+// 	const taskTypeOption = taskType.options[taskType.selectedIndex];
+// 	const taskPickUpName = addingTaskForm["taskPickUpName"];
+// 	const taskPickUpNumber = addingTaskForm["taskPickUpNumber"];
+// 	const taskPickUpEmail = addingTaskForm["taskPickUpEmail"];
+// 	const taskPickUpOrderId = addingTaskForm["taskPickUpOrderId"];
+// 	const taskPickUpAddress = addingTaskForm["taskPickUpAddress"];
+// 	const taskPickUpAddressValue = taskPickUpAddress;
+// 	const taskPickUpAddressLng = taskPickUpAddress.getAttribute("lng");
+// 	const taskPickUpAddressLat = taskPickUpAddress.getAttribute("lat");
+// 	const taskPickUpPickUpBefore = addingTaskForm["taskPickUpPickUpBefore"];
+// 	const taskPickUpDescription = addingTaskForm["taskPickUpDescription"];
+// 	const taskDeliveryName = addingTaskForm["taskDeliveryName"];
+// 	const taskDeliveryPhone = addingTaskForm["taskDeliveryNumber"];
+// 	const taskDeliveryEmail = addingTaskForm["taskDeliveryEmail"];
+// 	const taskDeliveryOrderId = addingTaskForm["taskDeliveryOrderId"];
+// 	const taskDeliveryAddress = addingTaskForm["taskDeliveryAddress"];
+// 	const taskDeliveryAddressLng = taskDeliveryAddress.getAttribute("lng");
+// 	const taskDeliveryAddressLat = taskDeliveryAddress.getAttribute("lat");
+// 	const taskDeliveryPickUpBefore = addingTaskForm["taskDeliveryPickUpBefore"];
+// 	const taskDeliveryDescription = addingTaskForm["taskDeliveryDescription"];
+// 	const addTaskDriverId = addingTaskForm["addTaskDriverId"];
+// 	const addTaskDriverIdOption = addTaskDriverId.options[addTaskDriverId.selectedIndex];
+// 	const addTaskDriverTeamValue =
+// 		addTaskDriverIdOption.value === 0
+// 			? addTaskDriverId.options[addTaskDriverId.selectedIndex].dataset.team
+// 			: 0;
+// 	let driverId;
+
+// 	const addTaskValidate = [
+// 		taskTypeOption,
+// 		taskPickUpName,
+// 		taskPickUpNumber,
+// 		taskPickUpEmail,
+// 		taskPickUpOrderId,
+// 		taskPickUpAddressValue,
+// 		taskPickUpPickUpBefore,
+// 		taskDeliveryName,
+// 		taskDeliveryPhone,
+// 		taskDeliveryEmail,
+// 		taskDeliveryOrderId,
+// 		taskDeliveryAddress,
+// 		taskDeliveryPickUpBefore,
+// 		addTaskDriverId,
+// 	];
+
+// 	let emptyInputs = 0;
+
+// 	addTaskValidate.forEach((input) => {
+// 		if (input.value.trim() == "") {
+// 			input.classList.add("reg-input_err");
+// 			document.querySelector("#addTaskErrorMessage").innerHTML = "This Fields cant be blank";
+// 			document.querySelector("#addTaskErrorMessage").classList.add("addTaskErrMessage--active");
+// 			return (emptyInputs += 1);
+// 		}
+// 	});
+
+// 	if (emptyInputs != 0) return;
+// 	const task = {
+// 		driverId: addTaskDriverIdOption.value,
+// 		taskUid: "",
+// 		status: -1,
+// 		type: taskTypeOption.value,
+// 		pickup: {
+// 			name: taskPickUpName.value,
+// 			email: taskPickUpEmail.value,
+// 			phone: taskPickUpNumber.value,
+// 			orderId: taskPickUpOrderId.value,
+// 			description: taskPickUpDescription.value,
+// 			pickupBefore: taskPickUpPickUpBefore.value,
+// 			address: {
+// 				name: taskPickUpAddress.value,
+// 				lat: taskPickUpAddressLat,
+// 				lng: taskPickUpAddressLng,
+// 			},
+// 		},
+// 		deliver: {
+// 			name: taskDeliveryName.value,
+// 			email: taskDeliveryEmail.value,
+// 			phone: taskDeliveryPhone.value,
+// 			orderId: taskDeliveryOrderId.value,
+// 			description: taskDeliveryDescription.value,
+// 			deliverBefore: taskDeliveryPickUpBefore.value,
+// 			address: {
+// 				name: taskDeliveryAddress.value,
+// 				lat: taskDeliveryAddressLat,
+// 				lng: taskDeliveryAddressLng,
+// 			},
+// 		},
+// 	};
+
+// 	db.ref(`users/${uid}/tasks`)
+// 		.push(task)
+// 		.then((cred) => {
+// 			const taskUid = cred.getKey();
+// 			cred.update({
+// 				taskUid,
+// 			});
+// 			if (addTaskDriverIdOption.value != 0) {
+// 				let pastValue;
+// 				db.ref(
+// 					`users/${uid}/drivers/${addTaskDriverTeamValue}/${addTaskDriverIdOption.value}/tasks`
+// 				)
+// 					.once("value", (cred) => (pastValue = cred.val()))
+// 					.then(() => {
+// 						let newValue;
+// 						if (pastValue !== null) {
+// 							newValue = [...pastValue, taskUid];
+// 						} else {
+// 							newValue = [taskUid];
+// 						}
+
+// 						db.ref(
+// 							`users/${uid}/drivers/${addTaskDriverTeamValue}/${addTaskDriverIdOption.value}`
+// 						).update({
+// 							tasks: newValue,
+// 							driverStatus: 0,
+// 						});
+// 					});
+// 			}
+
+// 			anime({
+// 				targets: ".createTaskItemContainerPopup",
+// 				left: ["0%", "-100%"],
+// 				duration: 500,
+// 				easing: "easeInOutQuad",
+// 				complete: () => {
+// 					createTaskItemContainerPopup.style.display = "none";
+// 				},
+// 			});
+// 			popUpMessage.innerHTML = "task added succesfully";
+// 			popUpMessage.classList.add("popup_message--succ");
+// 			popUpMessage.style.display = "block";
+// 			setTimeout(() => {
+// 				popUpMessage.style.display = "none";
+// 			}, 5000);
+// 		})
+// 		.catch((err) => {
+// 			popUpMessage.innerHTML = err.message;
+// 			popUpMessage.classList.add("popup_message--err");
+// 			popUpMessage.style.display = "block";
+// 			setTimeout(() => {
+// 				popUpMessage.style.display = "none";
+// 			}, 5000);
+// 		});
+// });
+
+// // ===================================
+
+// // Task Details ===================================
+// const taskDetailsPopup = document.querySelector(".taskDetailsPopup_container");
+// const taskDetailsPopupBackgroundShade = taskDetailsPopup.parentNode;
+
+// // ===================================

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- General -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logista &nbsp;|&nbsp; Dashboard</title>
+    <meta name="title" content="Logista | Dashboard" />
+    <meta name="description"
+        content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+
+    <link rel="shortcut icon" href="assets/images/logos/logista-logo.png" type="image/x-icon"
+        id="themeLightOsIconSite" />
+
+    <link rel="shortcut icon" href="assets/images/logos/logista-logo-white.png" type="image/x-icon"
+        id="themeDarkOsIconSite" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://logista.app/index.html" />
+    <meta property="og:title" content="Logista | Dashboard" />
+    <meta property="og:description"
+        content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+    <meta property="og:image" content="assets/images/logos/logista-logo-white-background.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://logista.app/index.html" />
+    <meta property="twitter:title" content="Logista | Dashboard" />
+    <meta property="twitter:description"
+        content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+    <meta property="twitter:image" content="assets/images/logos/logista-logo-white-background.png" />
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+        integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+
+    <!-- javascript vendors -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"
+        integrity="sha256-hBMojZuWKocCflyaG8T19KBq9OlTlK39CTxb8AUWKhY=" crossorigin="anonymous"></script>
+    <!-- css vendors-->
+
+    <!-- css -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- javascript -->
+    <!-- <script defer src="assets/js/map.js"></script> -->
+    <script src="assets/js/functions.js"></script>
+    <script defer src="assets/js/main.js"></script>
+    <script defer src="assets/js/team.js"></script>
+</head>
+
+<body class="map-page_container">
+    <main>
+        <div class="teams">
+            <h2>Add Teams</h2>
+            <form id="addTeamForm" action="">
+                <label for="name">name</label>
+                <input type="name" name="name" id="name">
+                <select name="geoLocation" id="geoFence">
+                    <option value="" disabled selected>loading Geofences...</option>
+                </select>
+            </form>
+            <div id="addTeam"></div>
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
+        integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg=="
+        crossorigin="anonymous">
+    </script>
+    <!-- init firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+</body>
+
+</html>

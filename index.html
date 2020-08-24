@@ -298,11 +298,17 @@
     </div>
   </nav>
 
-  <div class="confirmation_contianer_popup">
-    <div class="confirmation_contianer_popup-message">Are you sure</div>
-    <div class="confirmation_contianer_popup-btn_container">
-      <button id="confirmation_contianer_cancel" class="confirmation_contianer_popup-btn">Cancel</button>
-      <button id="confirmation_contianer_dicard" class="confirmation_contianer_popup-btn">dicard</button>
+  <div id="confirmation_bgshade" class="taskDetailsPopup_list">
+    <div class="confirmation_contianer_popup">
+      <div class="confirmation_contianer_popup-message">Are you sure</div>
+      <div class="confirmation_contianer_popup-btn_container">
+        <button id="confirmation_contianer_cancel" class="confirmation_contianer_popup-btn">
+          Cancel
+        </button>
+        <button id="confirmation_contianer_dicard" class="confirmation_contianer_popup-btn">
+          dicard
+        </button>
+      </div>
     </div>
   </div>
 
@@ -328,93 +334,110 @@
             </div>
 
             <div class="ocordion_item">
-              <div class="ocordion_btn pickup_btn addtask-select"><span>Pickup</span> <i
-                  class="fas fa-chevron-down"></i>
+              <div class="ocordion_btn pickup_btn addtask-select"><span>Pickup</span>
+                <i class="fas fa-chevron-down"></i>
               </div>
-              <div class="ocordion_body pickup_contanier">
+              <div id="ocordionPickup" class="ocordion_body pickup_contanier">
 
                 <div class="addtask-input_container">
                   <i class="fas fa-user"></i>
-                  <input type="text" placeholder="name" name="taskPickUpName" />
+                  <input type="text" isReq="true" placeholder="name" name="taskPickUpName" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container">
-                  <input type="number" placeholder="Phone" name="taskPickUpNumber" />
+                  <input type="phone" placeholder="Phone" name="taskPickUpNumber" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container">
                   <i class="fas fa-envelope"></i>
                   <input type="email" placeholder="email address" name="taskPickUpEmail" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container">
-                  <input type="number" placeholder="Order Id" name="taskPickUpOrderId" />
+                  <input isReq="true" type="text" placeholder="Order Id" name="taskPickUpOrderId" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container--full addtask-input_container">
                   <i class="fas fa-map-marker-alt"></i>
-                  <input id="taskPickUpAddressSearchInput" name="taskPickUpAddress" type="text" />
+                  <input isReq="true" id="taskPickUpAddressSearchInput" name="taskPickUpAddress" type="text" />
+                  <input id="taskDurationInSec" hidden name="taskDuration" type="text" />
+                  <input id="taskDistance" hidden name="taskDistance" type="text" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container--full addtask-input_container">
                   <i class="far fa-calendar-alt"></i>
-                  <input type="date" placeholder="Pickup Before" name="taskPickUpPickUpBefore" />
+                  <input type="datetime-local" placeholder="Pickup Before" name="taskPickUpPickUpBefore" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container--full addtask-input_container">
                   <i class="fas fa-pencil-alt"></i>
                   <input type="text" placeholder="decription" name="taskPickUpDescription" />
+                  <span class="addTaskError"></span>
                 </div>
 
               </div>
             </div>
 
             <div class="ocordion_item">
-              <div class="ocordion_btn dropoff_btn addtask-select"><span>Delivery</span> <i
-                  class="fas fa-chevron-down"></i>
+              <div class="ocordion_btn dropoff_btn addtask-select"><span>Delivery</span>
+                <i class="fas fa-chevron-down"></i>
               </div>
 
-              <div class="ocordion_body dropoff_container">
+              <div id="ocordionDropoff" class="ocordion_body dropoff_container">
 
                 <div class="addtask-input_container">
                   <i class="fas fa-user"></i>
-                  <input type="text" placeholder="name" name="taskDeliveryName" />
+                  <input isReq="true" type="text" placeholder="name" name="taskDeliveryName" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container">
-                  <input type="number" placeholder="Phone" name="taskDeliveryNumber" />
+                  <input type="phone" placeholder="Phone" name="taskDeliveryNumber" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container">
                   <i class="fas fa-envelope"></i>
                   <input type="email" placeholder="email address" name="taskDeliveryEmail" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container">
-                  <input type="number" placeholder="Order Id" name="taskDeliveryOrderId" />
+                  <input isReq="true" type="text" placeholder="Order Id" name="taskDeliveryOrderId" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container--full addtask-input_container">
                   <i class="fas fa-map-marker-alt"></i>
-                  <input type="text" id="taskDeliveryAddress" placeholder="delivery address"
+                  <input isReq="true" type="text" id="taskDeliveryAddress" placeholder="delivery address"
                     name="taskDeliveryAddress" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container--full addtask-input_container">
                   <i class="far fa-calendar-alt"></i>
-                  <input type="date" placeholder="deliver Before" name="taskDeliveryPickUpBefore" />
+                  <input type="datetime-local" placeholder="deliver Before" name="taskDeliveryPickUpBefore" />
+                  <span class="addTaskError"></span>
                 </div>
 
                 <div class="addtask-input_container--full addtask-input_container">
                   <i class="fas fa-pencil-alt"></i>
                   <input type="text" placeholder="decription" name="taskDeliveryDescription" />
+                  <span class="addTaskError"></span>
                 </div>
 
               </div>
 
             </div>
 
-            <select class="addtask-select" name="addTaskDriverId" id="addTaskDrivers">
+            <select isReq="true" class="addtask-select" name="addTaskDriverId" id="addTaskDrivers">
+              <option value="" disabled selected>loading...</option>
             </select>
           </div>
         </div>
@@ -523,12 +546,16 @@
     </div>
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
+    integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg=="
+    crossorigin="anonymous">
+  </script>
   <!-- init firebase -->
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNBlO3zbLUSmjmiCSKJRPvGaYHm6CoIFQ&libraries=places&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvKCQ5Ync-aLf0_fZcxvMhlST6o2MMh2U&libraries=places&callback=initMap"
     async></script>
 </body>
 

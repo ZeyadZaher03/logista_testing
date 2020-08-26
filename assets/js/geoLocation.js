@@ -1,49 +1,10 @@
 const dbPolyies = []
 const numOfPolygonsMade = []
+const addFenceForm = document.querySelector(".geofence-form")
+const addGeoFenceButton = document.querySelector(".add-geofence")
+const drawFenceButton = document.querySelector(".draw")
 
-const deleteF = () => {
-    const deleteButtons = document.querySelectorAll(".deleteFe")
-    deleteButtons.forEach((deleteButton) => {
-        deleteButton.addEventListener("click", () => {
-            console.log(deleteButton.dataset.id)
-            db.ref(`users/${uid}/geoFences/${deleteButton.dataset.id}`).remove()
-        })
-    })
-}
-
-const getGeoFences = db.ref(`users/${uid}/geoFences`).on("value", (snapshot) => {
-    dbPolyies.splice(0, dbPolyies.length)
-    const parent = document.querySelector("#fences")
-    parent.innerHTML = ""
-    snapshot.forEach((childSnapshot) => {
-        const geoFence = childSnapshot.val()
-        const name = geoFence.name
-        const cords = geoFence.cords
-        const color = geoFence.color
-        dbPolyies.push({
-            name,
-            cords,
-            color,
-        })
-
-        const geoFenceItem = document.createElement("div")
-        const geoFenceName = document.createElement("p")
-        const geoFenceDelete = document.createElement("button")
-
-        geoFenceName.innerHTML = name
-        geoFenceDelete.innerHTML = "delete"
-        geoFenceDelete.classList.add("deleteFe")
-        geoFenceDelete.dataset.id = childSnapshot.key
-
-        geoFenceItem.appendChild(geoFenceName)
-        geoFenceItem.appendChild(geoFenceDelete)
-        parent.append(geoFenceItem)
-    })
-    initMap()
-    deleteF()
-})
-
-function initMap(mapOptions) {
+const initMap = (mapOptions) => {
     // DASHBOARD MAP
     var geoLocation = new google.maps.Map(document.querySelector(".geoLocation"), {
         zoom: 8,
@@ -53,6 +14,7 @@ function initMap(mapOptions) {
         },
         disableDefaultUI: true,
     });
+
     const creatPolygon = () => {
         dbPolyies.forEach((polygonData) => {
             const cords = polygonData.cords
@@ -71,9 +33,6 @@ function initMap(mapOptions) {
     creatPolygon()
 
     // Services
-    const directionsRendererTwo = new google.maps.DirectionsRenderer();
-    const directionsService = new google.maps.DirectionsService();
-    const distanceMatrixService = new google.maps.DistanceMatrixService();
     if (mapOptions) {
         if (mapOptions.mode = "addFence") {
             if (numOfPolygonsMade.length == 0) {
@@ -119,20 +78,94 @@ function initMap(mapOptions) {
     }
 }
 
-const add = document.querySelector(".add")
-const addFence = document.querySelector(".draw")
-addFence.addEventListener("click", (e) => {
+const deleteGeoFence = () => {
+    const deleteButtons = document.querySelectorAll(".deleteGeoFence")
+    deleteButtons.forEach((deleteButton) => {
+        deleteButton.addEventListener("click", () => {
+            const shouldDelete = confirm("Are you Sure You want to delete this geoFence")
+            if (shouldDelete) {
+                db.ref(`users/${uid}/geoFences/${deleteButton.dataset.id}`).remove()
+            }
+        })
+    })
+}
+
+const getGeoFences = () => {
+    db.ref(`users/${uid}/geoFences`).on("value", (snapshot) => {
+        dbPolyies.splice(0, dbPolyies.length)
+        const geoFencesContainer = document.querySelector(".fences-container-items")
+        geoFencesContainer.innerHTML = ""
+
+        snapshot.forEach((childSnapshot) => {
+            const geoFence = childSnapshot.val()
+            const id = childSnapshot.key
+            const name = geoFence.name
+            const cords = geoFence.cords
+            const color = geoFence.color
+            dbPolyies.push({
+                name,
+                cords,
+                color,
+            })
+
+            const geoFenceItem = document.createElement("div")
+            const geoFenceName = document.createElement("p")
+            const geoFenceDeleteButton = document.createElement("button")
+
+            geoFenceItem.classList.add("geofence-item")
+
+            geoFenceName.innerHTML = name
+            geoFenceName.classList.add("geofence-item-name")
+
+            geoFenceDeleteButton.innerHTML = "Delete"
+            geoFenceDeleteButton.classList.add("deleteGeoFence")
+            geoFenceDeleteButton.dataset.id = id
+
+            geoFenceItem.appendChild(geoFenceName)
+            geoFenceItem.appendChild(geoFenceDeleteButton)
+            geoFencesContainer.append(geoFenceItem)
+        })
+        initMap()
+        deleteGeoFence()
+    })
+}
+
+const addFence = () => {
+    const fenceColor = document.querySelector("#color")
+    const fenceName = document.querySelector("#name")
+    const addFence = () => {
+        if (numOfPolygonsMade.length == 0) {
+            alert("plase add fence")
+        } else if (fenceName.value.trim() == "") {
+            alert("plase add fence name")
+        } else {
+            db.ref(`users/${uid}/geoFences`).push({
+                color: fenceColor.value,
+                name: fenceName.value,
+                cords: numOfPolygonsMade[0]
+            })
+            numOfPolygonsMade.splice(0, numOfPolygonsMade.length)
+            addFenceForm.reset()
+        }
+    }
+    addFenceForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+        addFence()
+    })
+
+    addGeoFenceButton.addEventListener("click", (e) => {
+        e.preventDefault()
+        addFence()
+    })
+}
+
+drawFenceButton.addEventListener("click", (e) => {
     e.preventDefault()
     initMap({
         mode: "addFence"
     })
 })
-add.addEventListener("click", (e) => {
-    e.preventDefault()
-    if (numOfPolygonsMade.length == 0) return
-    db.ref(`users/${uid}/geoFences`).push({
-        color: document.querySelector("#color").value,
-        name: document.querySelector("#name").value,
-        cords: numOfPolygonsMade[0]
-    })
-})
+
+getGeoFences()
+addFence()
+hamburgerMenu()

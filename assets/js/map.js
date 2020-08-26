@@ -532,32 +532,30 @@ const readDriver = () => {
 	        </div>`;
 		}
 
-		driversData.forEach((teamsSnapshot) => {
-			teamsSnapshot.forEach((driverSnapshot) => {
-				const driver = driverSnapshot.val()
-				const isOffDuty = driver.driverStatus == -1
-				const isOnline = driver.driverStatus == 0
-				const isBusy = driver.driverStatus == 1
+		driversData.forEach((driverSnapshot) => {
+			const driver = driverSnapshot.val()
+			const isOffDuty = driver.driverStatus == -1
+			const isOnline = driver.driverStatus == 0
+			const isBusy = driver.driverStatus == 1
 
-				const appendDriverToTab = () => {
-					if (isOffDuty) {
-						busyContainer.innerHTML += createDriverItem(driverSnapshot)
-						numOfInActive += 1;
-					} else if (isOnline) {
-						freeContainer.innerHTML += createDriverItem(driverSnapshot)
-						numOfActive += 1;
-					} else if (isBusy) {
-						inActiveContainer.innerHTML += createDriverItem(driverSnapshot)
-						numOfBusy += 1;
-					} else {
-						inActiveContainer.innerHTML += createDriverItem(driverSnapshot)
-						numOfInActive += 1;
-					}
+			const appendDriverToTab = () => {
+				if (isOffDuty) {
+					busyContainer.innerHTML += createDriverItem(driverSnapshot)
+					numOfInActive += 1;
+				} else if (isOnline) {
+					freeContainer.innerHTML += createDriverItem(driverSnapshot)
+					numOfActive += 1;
+				} else if (isBusy) {
+					inActiveContainer.innerHTML += createDriverItem(driverSnapshot)
+					numOfBusy += 1;
+				} else {
+					inActiveContainer.innerHTML += createDriverItem(driverSnapshot)
+					numOfInActive += 1;
 				}
+			}
 
-				appendDriverToTab()
-			})
-		});
+			appendDriverToTab()
+		})
 		changeTabNumber()
 		openDriverDetails()
 	})

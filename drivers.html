@@ -55,11 +55,13 @@
 
 
 <body>
-  <div class="confirmation_contianer_popup">
-    <div class="confirmation_contianer_popup-message">Are you sure</div>
-    <div class="confirmation_contianer_popup-btn_container">
-      <button id="confirmation_contianer_cancel" class="confirmation_contianer_popup-btn">Cancel</button>
-      <button id="confirmation_contianer_dicard" class="confirmation_contianer_popup-btn">dicard</button>
+  <div id="confirmation_bgshade">
+    <div class="confirmation_contianer_popup">
+      <div class="confirmation_contianer_popup-message">Are you sure</div>
+      <div class="confirmation_contianer_popup-btn_container">
+        <button id="confirmation_contianer_cancel" class="confirmation_contianer_popup-btn">Cancel</button>
+        <button id="confirmation_contianer_dicard" class="confirmation_contianer_popup-btn">dicard</button>
+      </div>
     </div>
   </div>
 
@@ -372,27 +374,27 @@
 
       <ul class="hamburger_list">
         <li class="hamburger_list">
-          <a class="hamburger_link " href="index.html">
+          <a class="hamburger_link hamburger_link--active" href="index.html">
             <span class="hamurger_link-icon_container">
               <i class="hamurger_link-icon fas fa-cog"></i>
             </span>
             <p class="hamburger_item-txt">dashboard</p>
           </a>
         </li>
-        <li class="hamburger_list hamburger_link--active">
+        <li class="hamburger_list">
           <a class="hamburger_link" href="drivers.html">
-            <span class=" hamurger_link-icon_container">
+            <span class="hamurger_link-icon_container">
               <i class="hamurger_link-icon fas fa-user"></i>
             </span>
             <p class="hamburger_item-txt">Drivers</p>
           </a>
         </li>
         <li class="hamburger_list">
-          <a class="hamburger_link" href="#">
+          <a class="hamburger_link" href="bulkadd.html">
             <span class="hamurger_link-icon_container">
               <i class="hamurger_link-icon fas fa-user-friends"></i>
             </span>
-            <p class="hamburger_item-txt">Customers</p>
+            <p class="hamburger_item-txt">Bluk Creat Task</p>
           </a>
         </li>
         <li class="hamburger_list">
@@ -412,19 +414,19 @@
           </a>
         </li>
         <li class="hamburger_list">
-          <a class="hamburger_link" href="#">
+          <a class="hamburger_link" href="teams.html">
             <span class="hamurger_link-icon_container">
-              <i class="hamurger_link-icon fas fa-comment-dots"></i>
+              <i class="hamurger_link-icon fas fa-user-friends"></i>
             </span>
-            <p class="hamburger_item-txt">Chat</p>
+            <p class="hamburger_item-txt">Teams</p>
           </a>
         </li>
         <li class="hamburger_list">
-          <a class="hamburger_link" href="#">
+          <a class="hamburger_link" href="geo-fenceing.html">
             <span class="hamurger_link-icon_container">
-              <i class="hamurger_link-icon fas fa-puzzle-piece"></i>
+              <i class="hamurger_link-icon fas fa-draw-polygon"></i>
             </span>
-            <p class="hamburger_item-txt">Extensions</p>
+            <p class="hamburger_item-txt">GeoFencing</p>
           </a>
         </li>
         <li class="hamburger_list">
@@ -509,7 +511,7 @@
               <div class="drive_input-container">
                 <label for="">assign to team <span class="required">*</span></label>
                 <select type="text" class="drive_input" name="driverTeam">
-                  <option value="0">team 1</option>
+                  <option value="" disabled selected>loading Teams...</option>
                 </select>
               </div>
 

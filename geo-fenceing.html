@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- General -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logista &nbsp;|&nbsp; Add Geo Fencing</title>
+    <meta name="title" content="Logista | Dashboard" />
+    <meta name="description"
+        content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+
+    <link rel="shortcut icon" href="assets/images/logos/logista-logo.png" type="image/x-icon"
+        id="themeLightOsIconSite" />
+
+    <link rel="shortcut icon" href="assets/images/logos/logista-logo-white.png" type="image/x-icon"
+        id="themeDarkOsIconSite" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://logista.app/index.html" />
+    <meta property="og:title" content="Logista | Dashboard" />
+    <meta property="og:description"
+        content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+    <meta property="og:image" content="assets/images/logos/logista-logo-white-background.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://logista.app/index.html" />
+    <meta property="twitter:title" content="Logista | Dashboard" />
+    <meta property="twitter:description"
+        content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
+    <meta property="twitter:image" content="assets/images/logos/logista-logo-white-background.png" />
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+        integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+
+    <!-- javascript vendors -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"
+        integrity="sha256-hBMojZuWKocCflyaG8T19KBq9OlTlK39CTxb8AUWKhY=" crossorigin="anonymous"></script>
+    <!-- css vendors-->
+
+    <!-- css -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- javascript -->
+    <!-- <script defer src="assets/js/map.js"></script> -->
+    <script src="assets/js/functions.js"></script>
+    <script defer src="assets/js/main.js"></script>
+    <script defer src="assets/js/geoLocation.js"></script>
+</head>
+
+<body class="map-page_container">
+    <div class="hamburger_menu">
+        <div class="hamburger_menu-header">
+            <div class="hamburger_btn-back_container">
+                <div class="navigation_hamburgerBtn--item"></div>
+            </div>
+            <a href="index.html" class="hamburger_logo-container">
+                <div class="hamburger_logo">
+                    <img src="assets/images/logos/logista-logo-white.png" alt="Logista logo" />
+                </div>
+                <p>LOGISTA</p>
+            </a>
+        </div>
+
+        <ul class="hamburger_list">
+            <li class="hamburger_list">
+                <a class="hamburger_link hamburger_link--active" href="index.html">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-cog"></i>
+                    </span>
+                    <p class="hamburger_item-txt">dashboard</p>
+                </a>
+            </li>
+            <li class="hamburger_list">
+                <a class="hamburger_link" href="drivers.html">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-user"></i>
+                    </span>
+                    <p class="hamburger_item-txt">Drivers</p>
+                </a>
+            </li>
+            <li class="hamburger_list">
+                <a class="hamburger_link" href="bulkadd.html">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-user-friends"></i>
+                    </span>
+                    <p class="hamburger_item-txt">Bluk Creat Task</p>
+                </a>
+            </li>
+            <li class="hamburger_list">
+                <a class="hamburger_link" href="#">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon far fa-chart-bar"></i>
+                    </span>
+                    <p class="hamburger_item-txt">Analytics</p>
+                </a>
+            </li>
+            <li class="hamburger_list">
+                <a class="hamburger_link" href="#">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-cog"></i>
+                    </span>
+                    <p class="hamburger_item-txt">Settings</p>
+                </a>
+            </li>
+            <li class="hamburger_list">
+                <a class="hamburger_link" href="teams.html">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-user-friends"></i>
+                    </span>
+                    <p class="hamburger_item-txt">Teams</p>
+                </a>
+            </li>
+            <li class="hamburger_list">
+                <a class="hamburger_link" href="geo-fenceing.html">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-draw-polygon"></i>
+                    </span>
+                    <p class="hamburger_item-txt">GeoFencing</p>
+                </a>
+            </li>
+            <li class="hamburger_list">
+                <a class="hamburger_link" href="#">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-headset"></i>
+                    </span>
+                    <p class="hamburger_item-txt">Support</p>
+                </a>
+            </li>
+
+            <li class="hamburger_list">
+                <a class="hamburger_link" id="logoutBtn" href="#">
+                    <span class="hamurger_link-icon_container">
+                        <i class="hamurger_link-icon fas fa-sign-out-alt"></i>
+                    </span>
+                    <p class="hamburger_item-txt">Logout</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <main class="geoLocation_container">
+        <div class="geoLocation_add">
+            <div class="geofence-header">
+                <li class="navigation_item navigation_hamburgerBtn">
+                    <div class="navigation_hamburgerBtn--item"></div>
+                </li>
+                <h1 class="geofence-heading"> Add Geo-Fence</h1>
+            </div>
+            <div class="geofence-body">
+                <form class="geofence-form" action="">
+                    <div class="geofence-input">
+                        <label for="">name</label>
+                        <input id="name" type="name">
+                    </div>
+                    <input id="color" type="color">
+                    <button class="draw">draw map <i class="fas fa-draw-polygon"></i></button>
+                    <button class="add-geofence">add</button>
+                </form>
+                <div class="fences-container">
+                    <h2>Your Fences</h2>
+                    <div class="fences-container-items">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="geoLocation">
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
+        integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg=="
+        crossorigin="anonymous">
+    </script>
+    <!-- init firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvKCQ5Ync-aLf0_fZcxvMhlST6o2MMh2U&libraries=drawing&callback=initMap"
+        async></script>
+</body>
+
+</html>

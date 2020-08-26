@@ -10,6 +10,7 @@ auth.onAuthStateChanged((user) => {
     window.location.replace("signup.html");
   }
 });
+
 // ========================================
 function initMap() {
 
@@ -70,6 +71,33 @@ function initMap() {
 }
 // ===============
 
+const addDriverForm = document.querySelector(".addDriver_popup-form")
+
+const getTeams = () => {
+  const creatOptions = (snapshot) => {
+    const team = snapshot.val()
+    const id = snapshot.key
+    const name = team.name
+    return `<option value=${id}>${name}</option>`
+  }
+
+  db.ref(`users/${uid}/teams`).on("value", (snapshot) => {
+    const teamsOption = addDriverForm["driverTeam"]
+    teamsOption.innerHTML = ""
+    const numOfFences = snapshot.numChildren()
+    if (!!numOfFences) {
+      teamsOption.innerHTML = `<option value="" disabled selected>Please Select A Team</option>`
+    } else {
+      teamsOption.innerHTML = `<option value="" disabled selected >you Have no Teams</option>`
+    }
+    snapshot.forEach(geoFenceSnapshot => {
+      teamsOption.innerHTML += creatOptions(geoFenceSnapshot)
+    });
+  })
+}
+
+getTeams()
+
 
 closeElement("#closeAddDriverModal", ".addDriver_popup-container", true)
 
@@ -92,24 +120,6 @@ const popUpMessgeFunction = (message, delay, status) => {
     popUpMessage.innerHTML = "";
   }, delay * 1000);
 }
-// SELECT OPTION WITH DRIVERS
-db.ref(`users/${uid}/drivers`).on("value", function (snapshot) {
-  document.querySelector(
-    "#addTaskDrivers"
-  ).innerHTML += `<option value="0" selected>Please select a driver</option>`;
-  snapshot.forEach((driverTeam) => {
-    driverTeam.forEach((driverData) => {
-      const driver = driverData.val();
-      const driverFristName = driver.driverFirstName;
-      const driverTeamValue = driver.driverTeam.value;
-      const driverLastName = driver.driverLastName;
-      const driverId = driverData.key;
-      document.querySelector(
-        "#addTaskDrivers"
-      ).innerHTML += `<option data-team=${driverTeamValue} value="${driverId}" >${driverFristName} ${driverLastName}</option>`;
-    });
-  });
-});
 
 const confirmationPopUp = document.querySelector(".confirmation_contianer_popup")
 const confirmationPopUpActiveClass = "confirmation_contianer_popup--active"
@@ -117,7 +127,7 @@ const confirmationMessage = confirmationPopUp.querySelector(".confirmation_conti
 const confirmationContianerCancel = confirmationPopUp.querySelector("#confirmation_contianer_cancel")
 const confirmationContianerDiscard = confirmationPopUp.querySelector("#confirmation_contianer_dicard")
 
-const addDriverForm = document.querySelector(".addDriver_popup-form")
+
 addDriverForm.addEventListener("submit", (e) => {
   e.preventDefault()
 
@@ -198,7 +208,7 @@ addDriverForm.addEventListener("submit", (e) => {
     var reader = new FileReader();
     reader.onload = (e) => {
       driver.driverProfileImage = e.target.result
-      db.ref(`users/${uid}/drivers/${driverTeam.value}`)
+      db.ref(`users/${uid}/drivers`)
         .push(driver)
         .then(() => {
           anime({
@@ -250,27 +260,26 @@ addDriverBtn.addEventListener("click", (e) => {
 // read driver
 db.ref(`users/${uid}/drivers`).on("value", (res) => {
   document.querySelector(".driver_container-content_container").innerHTML = ""
-  res.forEach((team) => {
-    team.forEach((driverData) => {
-      const driver = driverData.val()
-      const driverId = driverData.key
-      const driverFirstName = driver.driverFirstName
-      const driverLastName = driver.driverLastName
-      const driverPhoneNumber = driver.driverPhoneNumber
-      const driverTeam = driver.driverTeam.name
-      const driverTeamValue = driver.driverTeam.value
+  res.forEach((driverData) => {
+    const driver = driverData.val()
+    const driverId = driverData.key
+    const driverFirstName = driver.driverFirstName
+    const driverLastName = driver.driverLastName
+    const driverPhoneNumber = driver.driverPhoneNumber
+    const driverTeam = driver.driverTeam.name
+    const driverTeamValue = driver.driverTeam.value
 
-      function getStatus() {
-        if (driver.status == -1) {
-          return "inactive"
-        } else if (driver.status = 0) {
-          return "Free"
-        } else if (driver.status = 1) {
-          return "busy"
-        }
+    function getStatus() {
+      if (driver.status == -1) {
+        return "inactive"
+      } else if (driver.status = 0) {
+        return "Free"
+      } else if (driver.status = 1) {
+        return "busy"
       }
-      const driverStatus = getStatus();
-      const driverItem = `<div class="driver_container-content-item">
+    }
+    const driverStatus = getStatus();
+    const driverItem = `<div class="driver_container-content-item">
           <p>${driverFirstName} ${driverLastName}</p>
           <p>${driverPhoneNumber}</p>
           <p>${driverTeam}</p>
@@ -279,24 +288,23 @@ db.ref(`users/${uid}/drivers`).on("value", (res) => {
           <button data-driver_team=${driverTeamValue} data-driver_id=${driverId} id="removeDriver">Remove</button>
         </div>`
 
-      document.querySelector(".driver_container-content_container").innerHTML += driverItem
-      const deleteDriverBtn = document.querySelector("#removeDriver")
-      const deleteDriverId = deleteDriverBtn.dataset.driver_id
-      const deleteDriverTeam = deleteDriverBtn.dataset.driver_team
+    document.querySelector(".driver_container-content_container").innerHTML += driverItem
+    const deleteDriverBtn = document.querySelector("#removeDriver")
+    const deleteDriverId = deleteDriverBtn.dataset.driver_id
+    const deleteDriverTeam = deleteDriverBtn.dataset.driver_team
 
-      deleteDriverBtn.addEventListener("click", (e) => {
-        e.preventDefault()
-        popupAreYouSure(
-          "Are you sure you want to Delete this driver??",
-          "Cancel",
-          "Delete",
-          () => {
-            db.ref(`users/${uid}/drivers/${deleteDriverTeam}/${deleteDriverId}`)
-              .remove()
-              .then(() => popUpMessgeFunction("Driver Has removed successfully", 5, 1))
-              .catch(() => popUpMessgeFunction("something went wronge please try again", 5, 1))
-          })
-      })
+    deleteDriverBtn.addEventListener("click", (e) => {
+      e.preventDefault()
+      popupAreYouSure(
+        "Are you sure you want to Delete this driver??",
+        "Cancel",
+        "Delete",
+        () => {
+          db.ref(`users/${uid}/drivers/${deleteDriverTeam}/${deleteDriverId}`)
+            .remove()
+            .then(() => popUpMessgeFunction("Driver Has removed successfully", 5, 1))
+            .catch(() => popUpMessgeFunction("something went wronge please try again", 5, 1))
+        })
     })
   })
 })
@@ -308,13 +316,8 @@ db.ref(`users/${uid}/drivers`).on("value", (res) => {
 
 
 // Front-End styling
-toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
-toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
-toggleHideAndShow(".notification_btn", ".notification_nav_container", "nav_popup--active");
-toggleHideAndShow(".menu_navigation_btn", ".menu_navigation_container", "nav_popup--active");
-tabSystem(".map_info-col__subhead-tasks", ".map_info-col__containar-tabTask", "map_info-col__subhead-item--active", "map_info-col__containar-tabTask--active", "tasktab");
-tabSystem(".map_info-col__subhead-agents", ".map_info-col__containar-tabAgnet", "map_info-col__subhead-item--active", "map_info-col__containar-tabAgnet--active", "agentTab");
-
+navigationButtonsActivation()
+addTask();
 responsiveJs("900px", () => {
   const colTasks = document.querySelector(".map_tasks");
   const colAgents = document.querySelector(".map_agents");
@@ -330,5 +333,3 @@ responsiveJs("900px", () => {
   colTasksBtn.addEventListener("click", () => colAgents.classList.add("map_col--collapsed"));
   colAgentsBtn.addEventListener("click", () => colTasks.classList.add("map_col--collapsed"));
 });
-
-addTask();

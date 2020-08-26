@@ -147,11 +147,12 @@ const popupAreYouSure = (message, btnCancelName, btnDiscardName, callback, escap
 		delay: 50,
 		easing: "easeInOutQuad",
 	})
-	if (escape) {
-		document.addEventListener("keydown", (e) => {
-			if (e.key === "Escape") closePopup()
-		})
-	}
+
+	// if (escape) {
+	// 	document.addEventListener("keydown", (e) => {
+	// 		if (e.key === "Escape") closePopup()
+	// 	})
+	// }
 
 	popupCancelBtn.addEventListener("click", (e) => {
 		e.preventDefault()
@@ -175,6 +176,27 @@ const closeElement = (closeBtn, moduleContainer, validate) => {
 
 	const selectedModal = document.querySelector(moduleContainer)
 	const closeModalBtn = document.querySelector(closeBtn)
+	const closeAnimation = () => {
+		anime({
+			targets: moduleContainer,
+			top: ['0px', '-150px'],
+			opacity: ['1', '0'],
+			duration: 300,
+			easing: "easeInOutQuad",
+			// complete() {
+			// 	addTeamContainer.style.display = "none"
+			// 	anime({
+			// 		targets: "#taskDetailsPopup_bgshade",
+			// 		opacity: ['1', '0'],
+			// 		duration: 200,
+			// 		easing: "easeInQuad",
+			// 		complete() {
+			// 			backgroundShade.style.display = "none"
+			// 		}
+			// 	})
+			// }
+		})
+	}
 	const checkValidity = () => {
 		if (validate == true) {
 			let numOfEmptyInputs = 0;
@@ -199,20 +221,14 @@ const closeElement = (closeBtn, moduleContainer, validate) => {
 
 		closeModalBtn.addEventListener("click", (e) => {
 			e.preventDefault()
-			if (validate == true) {
-				checkValidity()
-			} else {
-				selectedModal.style.display = "none"
-			}
+			// selectedModal.style.display = "none"
+			closeAnimation()
 		})
 
 		document.addEventListener("keydown", (e) => {
 			if (e.key == "Escape") {
-				if (validate == true) {
-					checkValidity()
-				} else {
-					selectedModal.style.display = "none"
-				}
+				// selectedModal.style.display = "none"
+				closeAnimation()
 			}
 		})
 
@@ -587,15 +603,13 @@ const addTask = () => {
 		const driversSelect = document.querySelector("#addTaskDrivers")
 		driversSelect.innerHTML = ""
 		driversSelect.innerHTML = `<option value="" disabled selected>Please Select A driver</option>`
-		snapshot.forEach((driversTeams) => {
-			driversTeams.forEach((driverSnapshot) => {
-				const driver = driverSnapshot.val()
-				const driverId = driverSnapshot.key
-				const fristName = driver.driverFirstName
-				const lastName = driver.driverLastName
-				const team = driver.driverTeam.value
-				driversSelect.innerHTML += `<option data-team=${team} data-id="${driverId}">${fristName} ${lastName}</option>`
-			})
+		snapshot.forEach((driverSnapshot) => {
+			const driver = driverSnapshot.val()
+			const driverId = driverSnapshot.key
+			const fristName = driver.driverFirstName
+			const lastName = driver.driverLastName
+			const team = driver.driverTeam.value
+			driversSelect.innerHTML += `<option data-team=${team} data-id="${driverId}">${fristName} ${lastName}</option>`
 		})
 		if (!snapshot.val()) {
 			driversSelect.innerHTML = `<option value="" disabled selected>Please Select A driver</option>`
@@ -670,5 +684,17 @@ const navigationButton = () => {
 	toggleHideAndShow(".dropoff_btn", ".dropoff_container", "ocordion_body--active");
 	toggleHideAndShow(".notification_btn", ".notification_nav_container", "nav_popup--active");
 	toggleHideAndShow(".menu_navigation_btn", ".menu_navigation_container", "nav_popup--active");
+}
 
+const navigationButtonsActivation = () => {
+	toggleHideAndShow(".notification_btn", ".notification_nav_container", "nav_popup--active");
+	toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
+	toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
+	toggleHideAndShow(".menu_navigation_btn", ".menu_navigation_container", "nav_popup--active");
+
+}
+
+const hamburgerMenu = () => {
+	toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
+	toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
 }

@@ -394,7 +394,7 @@
             <span class="hamurger_link-icon_container">
               <i class="hamurger_link-icon fas fa-user-friends"></i>
             </span>
-            <p class="hamburger_item-txt">Bluk Creat Task</p>
+            <p class="hamburger_item-txt">Bulk Creat Task</p>
           </a>
         </li>
         <li class="hamburger_list">
@@ -406,7 +406,7 @@
           </a>
         </li>
         <li class="hamburger_list">
-          <a class="hamburger_link" href="#">
+          <a class="hamburger_link" href="setting.html">
             <span class="hamurger_link-icon_container">
               <i class="hamurger_link-icon fas fa-cog"></i>
             </span>
@@ -467,31 +467,37 @@
               <div class="drive_input-container">
                 <label for="">Frist Name <span class="required">*</span></label>
                 <input type="text" class="drive_input" name="driverFirstName" />
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
                 <label for="">last Name</label>
                 <input type="text" class="drive_input" name="driverLastName" />
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
                 <label for="">Email</label>
                 <input type="email" class="drive_input" name="driverEmail" />
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
                 <label for="">Phone <span class="required">*</span></label>
                 <input type="text" class="drive_input" name="driverPhoneNumber" />
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
                 <label for="">username <span class="required">*</span></label>
                 <input type="text" class="drive_input" name="driverUsername" />
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
                 <label for="">Password (Minimum 8) <span class="required">*</span></label>
                 <input type="password" class="drive_input" name="driverPassword" />
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
@@ -501,11 +507,13 @@
                   <option value="1">user</option>
                   <option value="2">idk</option>
                 </select>
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
                 <label for="">tags </label>
                 <input type="text" class="drive_input" name="driverTags" />
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
@@ -513,11 +521,13 @@
                 <select type="text" class="drive_input" name="driverTeam">
                   <option value="" disabled selected>loading Teams...</option>
                 </select>
+                <span class="driver-add-error"></span>
               </div>
 
               <div class="drive_input-container">
                 <label for="">home address</label>
                 <input type="text" placeholder="Enter home address" class="drive_input" name="driverAddress" />
+                <span class="driver-add-error"></span>
               </div>
             </div>
             <div class="driver_image">
@@ -527,6 +537,7 @@
               <label class="driver_proile_picture-label" for="driver_proile_picture"><i class="fas fa-folder-open"></i>
                 Upload</label>
               <input type="file" id="driver_proile_picture" name="driver_proile_picture" />
+              <span class="driver-add-error"></span>
             </div>
           </div>
           <div class="car_type_select drive_input-container drive_input-container--full">
@@ -565,6 +576,7 @@
                 <i class="fas fa-walking"></i>
               </label>
             </div>
+            <span class="driver-add-error"></span>
           </div>
           <button>add driver</button>
         </form>
@@ -595,6 +607,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-storage.js"></script>
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvKCQ5Ync-aLf0_fZcxvMhlST6o2MMh2U&&libraries=places&callback=initMap"
     async defer></script>

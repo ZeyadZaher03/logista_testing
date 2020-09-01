@@ -19,6 +19,7 @@ const confirmationMessage = confirmationPopUp.querySelector(".confirmation_conti
 const confirmationContianerCancel = confirmationPopUp.querySelector("#confirmation_contianer_cancel");
 const confirmationContianerDiscard = confirmationPopUp.querySelector("#confirmation_contianer_dicard");
 const popUpMessage = document.querySelector(".popup_message");
+const dbPolyies = []
 
 
 
@@ -50,186 +51,223 @@ const addTaskMapArr = [];
 const addTaskMapArrMarkers = [];
 const arrayOfRoutes = [];
 
-function initMap(mapOptions) {
-	// Services
-	const directionsRendererTwo = new google.maps.DirectionsRenderer();
-	const directionsService = new google.maps.DirectionsService();
-	const distanceMatrixService = new google.maps.DistanceMatrixService();
+// function initMap(mapOptions) {
+// 	// Services
+// 	const directionsRendererTwo = new google.maps.DirectionsRenderer();
+// 	const directionsService = new google.maps.DirectionsService();
+// 	const distanceMatrixService = new google.maps.DistanceMatrixService();
 
-	// Functions
-	const colorObject = (task) => {
-		if (task.status == -1) {
-			return {
-				strokeColor: "#8c8c8c",
-				strokeOpacity: 0.55,
-			}
-		}
-		if (task.status == 0) {
-			return {
-				strokeColor: "#32a856"
-			}
-		}
-		if (task.status == 1) {
-			return {
-				strokeColor: "#363636",
-				strokeOpacity: 0.15,
-			}
-		}
-	}
+// 	// Functions
+// 	const colorObject = (task) => {
+// 		if (task.status == -1) {
+// 			return {
+// 				strokeColor: "#8c8c8c",
+// 				strokeOpacity: 0.55,
+// 			}
+// 		}
+// 		if (task.status == 0) {
+// 			return {
+// 				strokeColor: "#32a856"
+// 			}
+// 		}
+// 		if (task.status == 1) {
+// 			return {
+// 				strokeColor: "#363636",
+// 				strokeOpacity: 0.15,
+// 			}
+// 		}
+// 	}
 
-	const addRouteOnDashboardMap = (task) => {
-		const directionsRenderer = new google.maps.DirectionsRenderer({
-			polylineOptions: colorObject(task)
-		});
-		directionsRenderer.setMap(dashboardMap);
-		directionsService.route({
-				origin: task.pickup,
-				destination: task.deliver,
-				travelMode: google.maps.TravelMode.DRIVING,
-			},
-			(response, status) => {
-				if (status === "OK") {
-					directionsRenderer.setDirections(response);
-				} else {
-					window.alert("Directions request failed due to " + status);
-				}
-			}
-		);
-	}
 
-	// DASHBOARD MAP
-	var dashboardMap = new google.maps.Map(document.querySelector(".map_container"), {
-		zoom: 8,
-		center: {
-			lat: 30.0444,
-			lng: 31.2357,
-		},
-		disableDefaultUI: true,
-		mapTypeId: google.maps.MapTypeId.ROADMAP
-	});
 
-	// ADD TASK ROUTES
-	if (mapOptions) {
-		if (mapOptions.mode == "addTasksRoutes") arrayOfRoutes.forEach((task) => addRouteOnDashboardMap(task))
-	}
+// 	const addRouteOnDashboardMap = (task) => {
+// 		const directionsRenderer = new google.maps.DirectionsRenderer({
+// 			polylineOptions: colorObject(task)
+// 		});
+// 		directionsRenderer.setMap(dashboardMap);
+// 		directionsService.route({
+// 				origin: task.pickup,
+// 				destination: task.deliver,
+// 				travelMode: google.maps.TravelMode.DRIVING,
+// 			},
+// 			(response, status) => {
+// 				if (status === "OK") {
+// 					directionsRenderer.setDirections(response);
+// 				} else {
+// 					window.alert("Directions request failed due to " + status);
+// 				}
+// 			}
+// 		);
+// 	}
 
-	// ADDTASK MAP
-	var addTaskMaps = new google.maps.Map(document.querySelector(".createTaskItemContainer_map"), {
-		zoom: 8,
-		center: {
-			lat: 30.0444,
-			lng: 31.2357,
-		},
-		disableDefaultUI: true,
-	});
+// 	// DASHBOARD MAP
+// 	var dashboardMap = new google.maps.Map(document.querySelector(".map_container"), {
+// 		zoom: 8,
+// 		center: {
+// 			lat: 30.0444,
+// 			lng: 31.2357,
+// 		},
+// 		disableDefaultUI: true,
+// 		mapTypeId: google.maps.MapTypeId.ROADMAP
+// 	});
 
-	// ADD MARKS ON ADD TASKS MAP
-	const getDataAndSetMark = (input, autoComplete, map, title) => {
-		google.maps.event.addListener(autoComplete, "place_changed", () => {
-			var place = autoComplete.getPlace().geometry.location;
-			const lat = place.lat();
-			const lng = place.lng();
+// 	// geoFencing
+// 	const creatPolygon = () => {
+// 		dbPolyies.forEach((polygonData) => {
+// 			const cords = polygonData.cords
+// 			const color = polygonData.color
+// 			const polygon = new google.maps.Polygon({
+// 				paths: cords,
+// 				strokeColor: color,
+// 				strokeOpacity: 1,
+// 				strokeWeight: 4,
+// 				fillColor: color,
+// 				fillOpacity: .2
+// 			});
+// 			polygon.setMap(dashboardMap);
+// 		})
+// 	}
+// 	creatPolygon()
 
-			const center = new google.maps.LatLng(lat, lng);
-			map.panTo(center);
+// 	// ADD TASK ROUTES
+// 	if (mapOptions) {
+// 		if (mapOptions.mode == "addTasksRoutes") arrayOfRoutes.forEach((task) => addRouteOnDashboardMap(task))
+// 	}
 
-			const addMarker = new google.maps.Marker({
-				position: {
-					lat,
-					lng,
-				},
-				map,
-				title,
-			});
+// 	// ADDTASK MAP
+// 	var addTaskMaps = new google.maps.Map(document.querySelector(".createTaskItemContainer_map"), {
+// 		zoom: 8,
+// 		center: {
+// 			lat: 30.0444,
+// 			lng: 31.2357,
+// 		},
+// 		disableDefaultUI: true,
+// 	});
 
-			if (input.name === "taskPickUpAddress") {
-				input.setAttribute("lng", lng);
-				input.setAttribute("lat", lat);
+// 	// ADD MARKS ON ADD TASKS MAP
+// 	const getDataAndSetMark = (input, autoComplete, map, title) => {
+// 		google.maps.event.addListener(autoComplete, "place_changed", () => {
+// 			var place = autoComplete.getPlace().geometry.location;
+// 			const lat = place.lat();
+// 			const lng = place.lng();
 
-				addTaskMapArr[0] = {
-					place: input.value,
-					lng: lng,
-					lat: lat,
-				};
-				addTaskMapArrMarkers[0] = addMarker;
-			}
+// 			const center = new google.maps.LatLng(lat, lng);
+// 			map.panTo(center);
 
-			if (input.name === "taskDeliveryAddress") {
-				input.setAttribute("lng", lng);
-				input.setAttribute("lat", lat);
+// 			const addMarker = new google.maps.Marker({
+// 				position: {
+// 					lat,
+// 					lng,
+// 				},
+// 				map,
+// 				title,
+// 			});
 
-				addTaskMapArr[1] = {
-					place: input.value,
-					lng: lng,
-					lat: lat,
-				};
-				addTaskMapArrMarkers[1] = addMarker;
-			}
+// 			if (input.name === "taskPickUpAddress") {
+// 				input.setAttribute("lng", lng);
+// 				input.setAttribute("lat", lat);
 
-			directionsRendererTwo.setMap(addTaskMaps);
+// 				addTaskMapArr[0] = {
+// 					place: input.value,
+// 					lng: lng,
+// 					lat: lat,
+// 				};
+// 				addTaskMapArrMarkers[0] = addMarker;
+// 			}
 
-			function calculateAndDisplayRoute(directionsService, directionsRenderer) {
-				directionsService.route({
-						origin: addTaskMapArr[0],
-						destination: addTaskMapArr[1],
-						travelMode: google.maps.TravelMode.DRIVING,
-					},
-					(response, status) => {
-						if (status === "OK") {
-							directionsRenderer.setDirections(response);
-						} else {
-							window.alert("Directions request failed due to " + status);
-						}
-					}
-				);
-			}
+// 			if (input.name === "taskDeliveryAddress") {
+// 				input.setAttribute("lng", lng);
+// 				input.setAttribute("lat", lat);
 
-			if (addTaskMapArr.length === 2) {
-				addTaskMapArrMarkers.forEach((marker) => marker.setMap(null));
-				calculateAndDisplayRoute(directionsService, directionsRendererTwo);
-				distanceMatrixService.getDistanceMatrix({
-						origins: [addTaskMapArr[0].place],
-						destinations: [addTaskMapArr[1].place],
-						travelMode: "DRIVING",
-						unitSystem: google.maps.UnitSystem.METRIC,
-						avoidHighways: false,
-						drivingOptions: {
-							departureTime: new Date(Date.now()), // for the time N milliseconds from now.
-							trafficModel: "pessimistic",
-						},
-						avoidTolls: false,
-					},
-					(res, status) => {
-						document.querySelector("#taskDurationInSec").value =
-							res.rows[0].elements[0].duration_in_traffic.value;
-						document.querySelector("#taskDistance").value =
-							res.rows[0].elements[0].distance.value;
-					}
-				);
-			}
-		});
-	};
+// 				addTaskMapArr[1] = {
+// 					place: input.value,
+// 					lng: lng,
+// 					lat: lat,
+// 				};
+// 				addTaskMapArrMarkers[1] = addMarker;
+// 			}
 
-	// AUTOCOMPLETE MAP SEARCH INPUT
-	var dropOffInput = document.querySelector("#taskDeliveryAddress");
-	var autocompletedropOffInput = new google.maps.places.Autocomplete(dropOffInput);
+// 			directionsRendererTwo.setMap(addTaskMaps);
 
-	var pickupPoint = document.querySelector("#taskPickUpAddressSearchInput");
-	var autocompletePickUp = new google.maps.places.Autocomplete(pickupPoint);
+// 			function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+// 				directionsService.route({
+// 						origin: addTaskMapArr[0],
+// 						destination: addTaskMapArr[1],
+// 						travelMode: google.maps.TravelMode.DRIVING,
+// 					},
+// 					(response, status) => {
+// 						if (status === "OK") {
+// 							directionsRenderer.setDirections(response);
+// 						} else {
+// 							window.alert("Directions request failed due to " + status);
+// 						}
+// 					}
+// 				);
+// 			}
 
-	// RESTRICT SEARCH TO EGYPT ONLY
-	autocompletedropOffInput.setComponentRestrictions({
-		country: ["eg"],
-	});
-	autocompletePickUp.setComponentRestrictions({
-		country: ["eg"],
-	});
+// 			if (addTaskMapArr.length === 2) {
+// 				addTaskMapArrMarkers.forEach((marker) => marker.setMap(null));
+// 				calculateAndDisplayRoute(directionsService, directionsRendererTwo);
+// 				distanceMatrixService.getDistanceMatrix({
+// 						origins: [addTaskMapArr[0].place],
+// 						destinations: [addTaskMapArr[1].place],
+// 						travelMode: "DRIVING",
+// 						unitSystem: google.maps.UnitSystem.METRIC,
+// 						avoidHighways: false,
+// 						drivingOptions: {
+// 							departureTime: new Date(Date.now()), // for the time N milliseconds from now.
+// 							trafficModel: "pessimistic",
+// 						},
+// 						avoidTolls: false,
+// 					},
+// 					(res, status) => {
+// 						document.querySelector("#taskDurationInSec").value =
+// 							res.rows[0].elements[0].duration_in_traffic.value;
+// 						document.querySelector("#taskDistance").value =
+// 							res.rows[0].elements[0].distance.value;
+// 					}
+// 				);
+// 			}
+// 		});
+// 	};
 
-	// RUN
-	getDataAndSetMark(pickupPoint, autocompletePickUp, addTaskMaps, "Pick Up point");
-	getDataAndSetMark(dropOffInput, autocompletedropOffInput, addTaskMaps, "Pick Up point");
+// 	// AUTOCOMPLETE MAP SEARCH INPUT
+// 	var dropOffInput = document.querySelector("#taskDeliveryAddress");
+// 	var autocompletedropOffInput = new google.maps.places.Autocomplete(dropOffInput);
+
+// 	var pickupPoint = document.querySelector("#taskPickUpAddressSearchInput");
+// 	var autocompletePickUp = new google.maps.places.Autocomplete(pickupPoint);
+
+// 	// RESTRICT SEARCH TO EGYPT ONLY
+// 	autocompletedropOffInput.setComponentRestrictions({
+// 		country: ["eg"],
+// 	});
+// 	autocompletePickUp.setComponentRestrictions({
+// 		country: ["eg"],
+// 	});
+
+// 	// RUN
+// 	getDataAndSetMark(pickupPoint, autocompletePickUp, addTaskMaps, "Pick Up point");
+// 	getDataAndSetMark(dropOffInput, autocompletedropOffInput, addTaskMaps, "Pick Up point");
+// }
+const getGeoFences = () => {
+	db.ref(`users/${uid}/geoFences`).on("value", (snapshot) => {
+		dbPolyies.splice(0, dbPolyies.length)
+		snapshot.forEach((childSnapshot) => {
+			const geoFence = childSnapshot.val()
+			const name = geoFence.name
+			const cords = geoFence.cords
+			const color = geoFence.color
+			dbPolyies.push({
+				name,
+				cords,
+				color,
+			})
+		})
+		// initMap()
+	})
 }
-
+getGeoFences()
 // ===============
 
 // =========== TASK ===========
@@ -260,13 +298,12 @@ const readTasks = () => {
 		const arrayofTaskRoutes = []
 
 		const showRoutes = () => {
-			if (arrayOfRoutes.length === numFromDb) initMap({
-				mode: "addTasksRoutes",
-			})
+			// if (arrayOfRoutes.length === numFromDb) initMap({s
 		}
 
 		const creatTaskItem = (taskSnapshot) => {
 			const task = taskSnapshot.val()
+
 			const taskId = taskSnapshot.key
 			const pickupDate = moment.unix(task.pickup.date).format("MM/DD/YY- HH:MM");
 			const status = task.status;
@@ -313,49 +350,56 @@ const readTasks = () => {
 
 		tasks.forEach((taskData) => {
 			const task = taskData.val();
-			const isUnassigned = task.status == -1;
-			const isAssigned = task.status == 0;
-			const isCompleted = task.status == 1;
+			// const date = moment.;
+			const taskTimeStamp = moment.unix(task.pickup.date).format("YYYY-MM-DD hh:mm");
+			const todayDate = moment().format("YYYY-MM-DD");
+			const todayTimeStamp = moment(todayDate).format("YYYY-MM-DD hh:mm A");
 
-			const appendTaskToTab = () => {
-				if (isUnassigned) {
-					unAssignedTab.innerHTML += creatTaskItem(taskData)
-					numOfUnAssigned++;
-				} else if (isAssigned) {
-					assignedTab.innerHTML += creatTaskItem(taskData)
-					numOfAssigned++;
-				} else if (isCompleted) {
-					completedTab.innerHTML += creatTaskItem(taskData)
-					numOfCompleted++;
+			if (moment(todayTimeStamp).isBefore(moment(taskTimeStamp))) {
+				const isUnassigned = task.status == -1;
+				const isAssigned = task.status == 0;
+				const isCompleted = task.status == 1;
+				const appendTaskToTab = () => {
+					if (isUnassigned) {
+						unAssignedTab.innerHTML += creatTaskItem(taskData)
+						numOfUnAssigned++;
+					} else if (isAssigned) {
+						assignedTab.innerHTML += creatTaskItem(taskData)
+						numOfAssigned++;
+					} else if (isCompleted) {
+						completedTab.innerHTML += creatTaskItem(taskData)
+						numOfCompleted++;
+					}
 				}
-			}
 
-			const changeTabNumber = () => {
-				document.querySelector(".map_info-col__subhead-tasks[data-tasktab='0'] span").innerHTML = numOfUnAssigned;
-				document.querySelector(".map_info-col__subhead-tasks[data-tasktab='1'] span").innerHTML = numOfAssigned;
-				document.querySelector(".map_info-col__subhead-tasks[data-tasktab='2'] span").innerHTML = numOfCompleted;
-			}
-
-			const addRoutes = () => {
-				const routeData = {
-					mode: "addTasksRoutes",
-					address: task.deliver.address,
-					status: task.status,
-					pickup: {
-						lat: parseFloat(task.pickup.address.lat),
-						lng: parseFloat(task.pickup.address.lng),
-					},
-					deliver: {
-						lat: parseFloat(task.deliver.address.lat),
-						lng: parseFloat(task.deliver.address.lng),
-					},
+				const changeTabNumber = () => {
+					document.querySelector(".map_info-col__subhead-tasks[data-tasktab='0'] span").innerHTML = numOfUnAssigned;
+					document.querySelector(".map_info-col__subhead-tasks[data-tasktab='1'] span").innerHTML = numOfAssigned;
+					document.querySelector(".map_info-col__subhead-tasks[data-tasktab='2'] span").innerHTML = numOfCompleted;
 				}
-				arrayOfRoutes.push(routeData)
-			}
 
-			addRoutes()
-			appendTaskToTab()
-			changeTabNumber()
+				const addRoutes = () => {
+					const routeData = {
+						mode: "addTasksRoutes",
+						address: task.deliver.address,
+						status: task.status,
+						pickup: {
+							lat: parseFloat(task.pickup.address.lat),
+							lng: parseFloat(task.pickup.address.lng),
+						},
+						deliver: {
+							lat: parseFloat(task.deliver.address.lat),
+							lng: parseFloat(task.deliver.address.lng),
+						},
+					}
+					arrayOfRoutes.push(routeData)
+				}
+
+				addRoutes()
+				appendTaskToTab()
+				changeTabNumber()
+				// console.log("s")
+			}
 		});
 
 		showRoutes()
@@ -627,8 +671,8 @@ const openDriverDetails = () => {
 		const driverTeam = driverItem.dataset.team
 		driverItem.addEventListener("click", () => {
 			driverDetailsItem.innerHTML = "";
-			db.ref(`users/${uid}/drivers/${driverTeam}/${driverId}`).on("value", (snapshot) => {
-				unAssingendTasksSelect()
+			db.ref(`users/${uid}/drivers/${driverId}`).on("value", (snapshot) => {
+				unAssingendTasksSelect(driverId)
 				driverDetailsItem.innerHTML = createDriverDetailsItem(snapshot)
 			})
 			openDriverDetailsAnimation()
@@ -638,7 +682,7 @@ const openDriverDetails = () => {
 
 
 readDriver()
-const unAssingendTasksSelect = async () => {
+const unAssingendTasksSelect = async (driverId) => {
 	const dbConnect = await db.ref(`users/${uid}/tasks`)
 	const tasksData = await dbConnect.once("value", (snapshot) => snapshot)
 	let unAssignedTasks = []
@@ -647,13 +691,17 @@ const unAssingendTasksSelect = async () => {
 		unAssignedTasks.push(task)
 	})
 	const taskSelectEle = document.querySelector("#changeTask")
-	console.log(unAssignedTasks)
 	unAssignedTasks.forEach((unAssignedTask) => {
 		const id = unAssignedTask.key
 		const task = unAssignedTask.val()
-		console.log(id)
-		console.log(task)
-		taskSelectEle.innerHTML += `<option data-id="${id}">${task.pickup.name}</option>`
+		taskSelectEle.innerHTML += `<option data-driverId="${driverId}" value="${id}">${task.pickup.address.name} to ${task.deliver.address.name}</option>`
+	})
+
+	taskSelectEle.addEventListener("change", (e) => {
+		e.preventDefault()
+		const taskId = taskSelectEle.value
+		const driverId = taskSelectEle.options[taskSelectEle.selectedIndex].dataset.driverid;
+		assigneTaskToDriver(taskId, driverId)
 	})
 }
 

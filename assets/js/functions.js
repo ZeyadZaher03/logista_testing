@@ -236,17 +236,28 @@ const closeElement = (closeBtn, moduleContainer, validate) => {
 
 }
 
-const assigneTaskToDriver = async (taskId, driverTeam, driverId) => {
-	const driverTasks = await db.ref(`users/${uid}/drivers/${driverTeam}/${driverId}/tasks`)
-	const driverTasksData = await driverTasks.once("value", (snapshot) => snapshot)
-	const hasTasks = driverTasksData.val()
+const assigneTaskToDriver = async (taskId, driverId) => {
+	const driver = await db.ref(`users/${uid}/drivers/${driverId}`)
+	const task = await db.ref(`users/${uid}/tasks/${taskId}`)
+	task.update({
+		status: 0
+	})
+	const driverTasksData = await driver.once("value", (snapshot) => snapshot)
+	const hasTasks = driverTasksData.val().driverStatus
 	if (!hasTasks) {
 		const newVal = [taskId]
-		driverTasks.set(newVal)
+		driver.update({
+			driverStatus: -1,
+			tasks: newVal
+		})
 	} else {
 		const oldVal = hasTasks
+		if (oldVal.includes(taskId)) return
 		const newVal = [...oldVal, taskId]
-		driverTasks.set(newVal)
+		driver.update({
+			driverStatus: -1,
+			tasks: newVal
+		})
 	}
 }
 
@@ -697,4 +708,18 @@ const navigationButtonsActivation = () => {
 const hamburgerMenu = () => {
 	toggleHideAndShow(".navigation_hamburgerBtn", ".hamburger_menu", "hamburger_menu--active");
 	toggleHideAndShow(".hamburger_btn-back_container", ".hamburger_menu", "hamburger_menu--active");
+}
+
+const closeByEscape = (callback) => {
+	document.addEventListener("keydown", (e) => {
+		if (e.key == "Escape") callback()
+	})
+}
+
+
+const closeByButton = (button, callback) => {
+	button.addEventListener("click", (e) => {
+		e.preventDefault()
+		callback()
+	})
 }

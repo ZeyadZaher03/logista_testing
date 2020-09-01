@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <!-- General -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Logista &nbsp;|&nbsp; Teams</title>
-    <meta name="title" content="Logista | Teams" />
+    <title>Logista &nbsp;|&nbsp; Analytics</title>
+    <meta name="title" content="Logista | Analytics" />
     <meta name="description"
         content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
 
@@ -18,16 +17,16 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://logista.app/index.html" />
-    <meta property="og:title" content="Logista | Dashboard" />
+    <meta property="og:url" content="https://logista.app/signup.html" />
+    <meta property="og:title" content="Logista | Analytics" />
     <meta property="og:description"
         content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
     <meta property="og:image" content="assets/images/logos/logista-logo-white-background.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://logista.app/index.html" />
-    <meta property="twitter:title" content="Logista | Dashboard" />
+    <meta property="twitter:url" content="https://logista.app/signup.html" />
+    <meta property="twitter:title" content="Logista | Analytics" />
     <meta property="twitter:description"
         content="Logista is a fleet management and delivery solution geared towards digitizing the logistics and delivery operations of your business by allowing business owners to access to crucial insights and route optimization to reach efficiency and a smoother operation system." />
     <meta property="twitter:image" content="assets/images/logos/logista-logo-white-background.png" />
@@ -49,51 +48,12 @@
     <link rel="stylesheet" href="assets/css/style.css" />
 
     <!-- javascript -->
-    <!-- <script defer src="assets/js/map.js"></script> -->
     <script src="assets/js/functions.js"></script>
     <script defer src="assets/js/main.js"></script>
-    <script defer src="assets/js/team.js"></script>
+    <script defer src="assets/js/analytics.js"></script>
 </head>
 
-<body class="map-page_container">
-    <div id="taskDetailsPopup_bgshade" class="taskDetailsPopup_list">
-
-        <div class="addTeamContainer">
-            <div class="addTeam-heading">
-                <h2>Add New Team</h2>
-                <div class="closeBtnContianer addTeam-close">
-                    <i class="fas fa-times"></i>
-                </div>
-            </div>
-            <div class="addTeam-body">
-                <form class="addTeam-form" id="addTeamForm">
-                    <div class="input-contaniner">
-                        <label class="input-label" for="name">Team Name:</label>
-                        <input class="input-style" type="name" name="name" id="name" />
-                    </div>
-                    <div class="input-contaniner">
-                        <label class="input-label" for="start">Team Shift Start From:</label>
-                        <input class="input-style" type="number" name="start" id="start" />
-                    </div>
-                    <div class="input-contaniner">
-                        <label class="input-label" for="end">Team Shift End At:</label>
-                        <input class="input-style" type="number" name="end" id="end" />
-                    </div>
-                    <div class="input-contaniner">
-                        <label class="input-label" for="rate">Hourly Rate:</label>
-                        <input class="input-style" type="number" name="rate" id="rate" />
-                    </div>
-                    <select class="addTeam-select" name="geoFence" id="geoFence">
-                        <option value="" disabled selected>loading Geofences...</option>
-                    </select>
-                    <button class="addTeam-button" id="addTeam">Add Team</button>
-                </form>
-            </div>
-        </div>
-
-
-    </div>
-
+<body>
     <nav class="navigation">
         <ul class="navigation_list navigation_first">
             <li class="navigation_item navigation_hamburgerBtn">
@@ -103,7 +63,7 @@
             <li class="navigation_item navigation_logoContainer">
                 <a href="index.html" class="navigation_link">
                     <div class="navigation_logo">
-                        <img src="assets/images/logos/logista-logo-white.png" alt="Logista Logo" />
+                        <img src="assets/images/logos/logista-logo-white.png" alt="Logista Logo">
                     </div>
                     <h1>LOGISTA</h1>
                 </a>
@@ -220,7 +180,9 @@
             <li class="navigation_item">
                 <a href="#" class="navigation_icon navigation_link notification_btn">
                     <i class="fas fa-bell"></i>
-                    <div class="notification_number">1</div>
+                    <div class="notification_number">
+                        1
+                    </div>
                 </a>
             </li>
 
@@ -234,8 +196,8 @@
                             </div>
                             <div class="notification_container--navigation_text">
                                 <p>
-                                    Lorem ipsum, dolor sit amet consectetur
-                                    adipisicing elit. Sequi nostrum nisi
+                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                    Sequi nostrum nisi
                                 </p>
                                 <span>today</span>
                             </div>
@@ -338,31 +300,173 @@
             </ul>
         </div>
     </nav>
-    <main class="padding-container">
-        <div class="teams">
-            <div class="teams-header">
-                <h1>Add Teams</h1>
-                <button class="button-addnewThing">
-                    Add New Team <i class="fas fa-plus-circle"></i>
-                </button>
-            </div>
-            <table>
-                <tr class="team-tabel-header">
-                    <th>Team Name</th>
-                    <th>GeoFence</th>
-                    <th>Action</th>
-                </tr>
-                <tbody id="teamsContainer"></tbody>
-            </table>
+
+    <div class="createTaskItemContainerPopup">
+        <div class="createTaskItemContainer">
+            <form class="createTaskItemContainer_form">
+                <div class="createTaskItemContainer_content">
+                    <div class="createTaskItemContainer_header">
+                        <h2 class="createTaskItemContainer_heading">Add Task</h2>
+                        <div class="createTaskItemContainer_close">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <p id="addTaskErrorMessage" class="addTaskErrMessage"></p>
+                    <div class="createTaskItemContainer_form_container">
+                        <div class="addtask-input_container">
+                            <select name="taskType" class="addtask-select">
+                                <option value="pickupOnDelivery">Pickup on Delivery</option>
+                            </select>
+                        </div>
+
+                        <div class="ocordion_item">
+                            <div class="ocordion_btn pickup_btn addtask-select"><span>Pickup</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div id="ocordionPickup" class="ocordion_body pickup_contanier">
+
+                                <div class="addtask-input_container">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" isReq="true" placeholder="name" name="taskPickUpName" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container">
+                                    <input type="phone" placeholder="Phone" name="taskPickUpNumber" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" placeholder="email address" name="taskPickUpEmail" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container">
+                                    <input isReq="true" type="text" placeholder="Order Id" name="taskPickUpOrderId" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container--full addtask-input_container">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <input isReq="true" id="taskPickUpAddressSearchInput" name="taskPickUpAddress"
+                                        type="text" />
+                                    <input id="taskDurationInSec" hidden name="taskDuration" type="text" />
+                                    <input id="taskDistance" hidden name="taskDistance" type="text" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container--full addtask-input_container">
+                                    <i class="far fa-calendar-alt"></i>
+                                    <input type="datetime-local" placeholder="Pickup Before"
+                                        name="taskPickUpPickUpBefore" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container--full addtask-input_container">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    <input type="text" placeholder="decription" name="taskPickUpDescription" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="ocordion_item">
+                            <div class="ocordion_btn dropoff_btn addtask-select"><span>Delivery</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+
+                            <div id="ocordionDropoff" class="ocordion_body dropoff_container">
+
+                                <div class="addtask-input_container">
+                                    <i class="fas fa-user"></i>
+                                    <input isReq="true" type="text" placeholder="name" name="taskDeliveryName" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container">
+                                    <input type="phone" placeholder="Phone" name="taskDeliveryNumber" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" placeholder="email address" name="taskDeliveryEmail" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container">
+                                    <input isReq="true" type="text" placeholder="Order Id" name="taskDeliveryOrderId" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container--full addtask-input_container">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <input isReq="true" type="text" id="taskDeliveryAddress"
+                                        placeholder="delivery address" name="taskDeliveryAddress" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container--full addtask-input_container">
+                                    <i class="far fa-calendar-alt"></i>
+                                    <input type="datetime-local" placeholder="deliver Before"
+                                        name="taskDeliveryPickUpBefore" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                                <div class="addtask-input_container--full addtask-input_container">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    <input type="text" placeholder="decription" name="taskDeliveryDescription" />
+                                    <span class="addTaskError"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <select class="addtask-select" name="addTaskDriverId" id="addTaskDrivers">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="createTaskItemContainer_footer">
+                    <button class="createTaskItemContainer_assignauto">Assign Automatically</button>
+                    <button class="createTaskItemContainer_btn">Create Task</button>
+                </div>
+            </form>
         </div>
-    </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
-        integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg=="
-        crossorigin="anonymous"></script>
-    <!-- init firebase -->
+        <div class="createTaskItemContainer_map"></div>
+    </div>
+
+    <h2>number of tasks</h2>
+    <p id="tasks"></p>
+    <h2>number of completed tasks</h2>
+    <p id="completed_tasks"></p>
+    <h2>number of awaited tasks</h2>
+    <p id="awaited_tasks"></p>
+    <h2>number of unAssigned tasks</h2>
+    <p id="unAssigned_tasks"></p>
+
+    <h2>number of drivers</h2>
+    <p id="drivers"></p>
+    <h2>number of offline drivers</h2>
+    <p id="offline_drivers"></p>
+    <h2>number of busy drivers</h2>
+    <p id="busy_drivers"></p>
+    <h2>number of free drivers</h2>
+    <p id="free_drivers"></p>
+
+    <h2>number of geoFences</h2>
+    <p id="geoFences"></p>
+    <h2>number of teams</h2>
+    <p id="teams"></p>
+    <div id="teams_driver"></div>
+
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+
 </body>
 
 </html>
